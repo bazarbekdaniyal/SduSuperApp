@@ -232,7 +232,7 @@ pip install deep-translator
 python app.py
 ```
 
-Приложение будет доступно по адресу: `http://localhost:5000`
+Приложение будет доступно по адресу: `http://localhost:5001`
 
 ---
 
