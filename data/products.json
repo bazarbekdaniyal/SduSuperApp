@@ -1,0 +1,222 @@
+[
+  {
+    "id": "p1",
+    "name": "Худи SDU Classic",
+    "description": "Классическое худи с логотипом SDU. 100% хлопок, унисекс. Доступные размеры: S, M, L, XL.",
+    "price": 15000.0,
+    "category": "Clothing",
+    "image": "/static/uploads/products/978948dfc7cd477b81ee0ce4e60404d4.jpg",
+    "stock": 47,
+    "is_available": true,
+    "translations": {
+      "en": {
+        "name": "SDU Classic Hoodie",
+        "description": "Classic hoodie with SDU logo. 100% cotton, unisex. Available sizes: S, M, L, XL.",
+        "category": "Clothing"
+      },
+      "kz": {
+        "name": "SDU Classic худи",
+        "description": "SDU логотипі бар классикалық худи. 100% мақта, унисекс. Қолжетімді өлшемдер: S, M, L, XL.",
+        "category": "Киім"
+      }
+    }
+  },
+  {
+    "id": "p2",
+    "name": "Футболка SDU Pride",
+    "description": "Стильная футболка с надписью 'SDU Pride'. 100% хлопок, разные цвета.",
+    "price": 9900.0,
+    "category": "Clothing",
+    "image": "/static/uploads/products/bea889e9b3a1455b9d8e5218fc1c2409.jpg",
+    "stock": 86,
+    "is_available": true,
+    "translations": {
+      "en": {
+        "name": "SDU Pride T-Shirt",
+        "description": "Stylish t-shirt with 'SDU Pride' inscription. 100% cotton, various colors.",
+        "category": "Clothing"
+      },
+      "kz": {
+        "name": "SDU Pride футболка",
+        "description": "'SDU Pride' жазуы бар стильді футболка. 100% мақта, әртүрлі түстер.",
+        "category": "Киім"
+      }
+    }
+  },
+  {
+    "id": "p3",
+    "name": "Рюкзак SDU Campus",
+    "description": "Практичный рюкзак для студентов. Отделение для ноутбука до 15 дюймов, водоотталкивающий материал.",
+    "price": 12000.0,
+    "category": "Accessories",
+    "image": null,
+    "stock": 30,
+    "is_available": false,
+    "translations": {
+      "en": {
+        "name": "SDU Campus Backpack",
+        "description": "Practical backpack for students. Laptop compartment up to 15 inches, water-repellent material.",
+        "category": "Accessories"
+      },
+      "kz": {
+        "name": "SDU Campus сөмке",
+        "description": "Студенттер үшін практикалық сөмке. 15 дюймға дейін ноутбук бөлімі, суға төзімді материал.",
+        "category": "Аксессуарлар"
+      }
+    }
+  },
+  {
+    "id": "p4",
+    "name": "Кружка SDU",
+    "description": "Керамическая кружка с логотипом SDU. Объем 350 мл.",
+    "price": 5000.0,
+    "category": "Accessories",
+    "image": "/static/uploads/products/ec53fb935ec64739a9d8d4a7f4045915.jpg",
+    "stock": 72,
+    "is_available": true,
+    "translations": {
+      "en": {
+        "name": "SDU Mug",
+        "description": "Ceramic mug with SDU logo. Volume 350 ml.",
+        "category": "Accessories"
+      },
+      "kz": {
+        "name": "SDU кесе",
+        "description": "SDU логотипі бар керамикалық кесе. Көлемі 350 мл.",
+        "category": "Аксессуарлар"
+      }
+    }
+  },
+  {
+    "id": "p5",
+    "name": "Блокнот SDU A5",
+    "description": "Качественный блокнот формата A5 в твердой обложке. 100 листов в линейку.",
+    "price": 4000.0,
+    "category": "Stationery",
+    "image": "/static/uploads/products/6ebd7c68b6ad409cab12ca168b782eda.jpg",
+    "stock": 148,
+    "is_available": true,
+    "translations": {
+      "en": {
+        "name": "SDU A5 Notebook",
+        "description": "Quality A5 format notebook in hardcover. 100 ruled sheets.",
+        "category": "Stationery"
+      },
+      "kz": {
+        "name": "SDU A5 дәптер",
+        "description": "Қатты мұқабасы бар сапалы A5 форматты дәптер. 100 сызықты парақ.",
+        "category": "Канцелярия"
+      }
+    }
+  },
+  {
+    "id": "p6",
+    "name": "Ручка SDU Premium",
+    "description": "Металлическая ручка с гравировкой SDU. Отличный подарок для студента или преподавателя.",
+    "price": 3000.0,
+    "category": "Stationery",
+    "image": null,
+    "stock": 60,
+    "is_available": false,
+    "translations": {
+      "en": {
+        "name": "SDU Premium Pen",
+        "description": "Metal pen with SDU engraving. Great gift for a student or teacher.",
+        "category": "Stationery"
+      },
+      "kz": {
+        "name": "SDU Premium қалам",
+        "description": "SDU гравировкасы бар металл қалам. Студент немесе оқытушы үшін тамаша сыйлық.",
+        "category": "Канцелярия"
+      }
+    }
+  },
+  {
+    "id": "p7",
+    "name": "Термокружка SDU",
+    "description": "Термокружка из нержавеющей стали. Сохраняет температуру до 6 часов. Объем 500 мл.",
+    "price": 5000.0,
+    "category": "Accessories",
+    "image": "/static/uploads/products/be95d2e2fc0244c3ad1bb1822ed6f8a8.jpg",
+    "stock": 38,
+    "is_available": true,
+    "translations": {
+      "en": {
+        "name": "SDU Thermos Mug",
+        "description": "Stainless steel thermos mug. Keeps temperature for up to 6 hours. Volume 500 ml.",
+        "category": "Accessories"
+      },
+      "kz": {
+        "name": "SDU термос кесе",
+        "description": "Болатсыз болаттан жасалған термос кесе. Температураны 6 сағатқа дейін сақтайды. Көлемі 500 мл.",
+        "category": "Аксессуарлар"
+      }
+    }
+  },
+  {
+    "id": "p8",
+    "name": "Кепка SDU",
+    "description": "Бейсболка с вышитым логотипом SDU. Регулируемый размер.",
+    "price": 4000.0,
+    "category": "Clothing",
+    "image": null,
+    "stock": 45,
+    "is_available": false,
+    "translations": {
+      "en": {
+        "name": "SDU Cap",
+        "description": "Baseball cap with embroidered SDU logo. Adjustable size.",
+        "category": "Clothing"
+      },
+      "kz": {
+        "name": "SDU қалпақ",
+        "description": "SDU логотипі кестеленген бейсбол қалпағы. Реттелетін өлшем.",
+        "category": "Киім"
+      }
+    }
+  },
+  {
+    "id": "p9",
+    "name": "Зонт SDU",
+    "description": "Складной зонт с логотипом SDU. Автоматический механизм.",
+    "price": 5500.0,
+    "category": "Accessories",
+    "image": null,
+    "stock": 25,
+    "is_available": false,
+    "translations": {
+      "en": {
+        "name": "SDU Umbrella",
+        "description": "Folding umbrella with SDU logo. Automatic mechanism.",
+        "category": "Accessories"
+      },
+      "kz": {
+        "name": "SDU қолшатыр",
+        "description": "SDU логотипі бар бүктемелі қолшатыр. Автоматты механизм.",
+        "category": "Аксессуарлар"
+      }
+    }
+  },
+  {
+    "id": "p10",
+    "name": "Стикеры SDU Pack",
+    "description": "Набор из 10 виниловых стикеров с символикой SDU.",
+    "price": 1000.0,
+    "category": "Stationery",
+    "image": null,
+    "stock": 200,
+    "is_available": false,
+    "translations": {
+      "en": {
+        "name": "SDU Stickers Pack",
+        "description": "Set of 10 vinyl stickers with SDU symbols.",
+        "category": "Stationery"
+      },
+      "kz": {
+        "name": "SDU Стикерлер жинағы",
+        "description": "SDU символдары бар 10 винил стикерлер жинағы.",
+        "category": "Канцелярия"
+      }
+    }
+  }
+]

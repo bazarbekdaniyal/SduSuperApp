@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block title %}Schedule {{ cabinet.name }} - SDU SuperApp{% endblock %}
+
+{% block content %}
+<div class="container">
+    <a href="{{ url_for('rooms.search_cabinets') }}" class="back-link">
+        <i class="fas fa-arrow-left"></i> {{ t('rooms.back_to_search') }}
+    </a>
+
+    <div class="page-header">
+        <h1><i class="fas fa-door-open"></i> {{ cabinet.name }}</h1>
+        <p><i class="fas fa-building"></i> {{ cabinet.parent_building_en }}</p>
+    </div>
+
+    <div class="schedule-grid-container">
+        <table class="schedule-grid room-schedule-grid">
+            <thead>
+                <tr>
+                    <th class="time-header">{{ t('schedule.time') }}</th>
+                    {% for day_id, day_name in days.items() %}
+                    <th>{{ day_name }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for slot in time_slots %}
+                <tr>
+                    <td class="time-cell">{{ slot[0] }}<br><small>{{ slot[1] }}</small></td>
+                    {% for day_id in range(1, 7) %}
+                    {% set lesson = schedule_grid[(slot[0], slot[1])][day_id] %}
+                    {% if lesson %}
+                    <td class="lesson-cell occupied">
+                        <div class="lesson-code">{{ lesson.code }}</div>
+                        <div class="lesson-name">{{ lesson.name_en[:30] }}{% if lesson.name_en|length > 30 %}...{% endif
+                            %}</div>
+                        {% if lesson.teacher %}
+                        <div class="lesson-teacher">
+                            <i class="fas fa-user"></i> {{ lesson.teacher.full_name_en if lesson.teacher.full_name_en
+                            else 'N/A' }}
+                        </div>
+                        {% endif %}
+                    </td>
+                    {% else %}
+                    <td class="lesson-cell free">
+                        <span class="free-label">{{ t('schedule.free') }}</span>
+                    </td>
+                    {% endif %}
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="schedule-legend">
+        <div class="legend-item">
+            <span class="legend-color legend-occupied"></span>
+            <span>{{ t('schedule.occupied') }}</span>
+        </div>
+        <div class="legend-item">
+            <span class="legend-color legend-free"></span>
+            <span>{{ t('schedule.free') }}</span>
+        </div>
+    </div>
+</div>
+
+<style>
+    .schedule-grid-container {
+        overflow-x: auto;
+        margin-top: 1.5rem;
+    }
+
+    .schedule-grid {
+        width: 100%;
+        min-width: 900px;
+        border-collapse: collapse;
+        background: var(--bg-primary);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        box-shadow: var(--shadow);
+    }
+
+    .schedule-grid th,
+    .schedule-grid td {
+        border: 1px solid var(--border-color);
+        padding: 0.75rem;
+        text-align: center;
+        vertical-align: top;
+    }
+
+    .schedule-grid thead th {
+        background: var(--primary);
+        color: white;
+        font-weight: 600;
+        padding: 1rem 0.75rem;
+    }
+
+    .time-header {
+        width: 80px;
+    }
+
+    .time-cell {
+        background: var(--bg-tertiary);
+        font-weight: 600;
+        font-size: 0.85rem;
+        white-space: nowrap;
+    }
+
+    .time-cell small {
+        color: var(--text-muted);
+        font-weight: normal;
+    }
+
+    .lesson-cell {
+        min-width: 140px;
+        font-size: 0.8rem;
+        transition: background 0.2s;
+    }
+
+    .lesson-cell.occupied {
+        background: rgba(239, 68, 68, 0.1);
+    }
+
+    .lesson-cell.free {
+        background: rgba(34, 197, 94, 0.1);
+    }
+
+    .lesson-cell.free:hover {
+        background: rgba(34, 197, 94, 0.2);
+    }
+
+    .lesson-code {
+        font-weight: 700;
+        color: var(--primary);
+        font-size: 0.75rem;
+    }
+
+    .lesson-name {
+        margin-top: 0.25rem;
+        font-weight: 500;
+        line-height: 1.3;
+    }
+
+    .lesson-teacher {
+        margin-top: 0.35rem;
+        font-size: 0.7rem;
+        color: var(--text-secondary);
+    }
+
+    .free-label {
+        color: var(--success);
+        font-size: 0.75rem;
+    }
+
+    .schedule-legend {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin-top: 1.5rem;
+        padding: 1rem;
+        background: var(--bg-secondary);
+        border-radius: var(--radius);
+    }
+
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .legend-color {
+        width: 20px;
+        height: 20px;
+        border-radius: 4px;
+    }
+
+    .legend-occupied {
+        background: rgba(239, 68, 68, 0.3);
+        border: 1px solid rgba(239, 68, 68, 0.5);
+    }
+
+    .legend-free {
+        background: rgba(34, 197, 94, 0.3);
+        border: 1px solid rgba(34, 197, 94, 0.5);
+    }
+
+    @media (max-width: 768px) {
+        .schedule-grid {
+            font-size: 0.75rem;
+        }
+
+        .schedule-grid th,
+        .schedule-grid td {
+            padding: 0.5rem;
+        }
+
+        .lesson-cell {
+            min-width: 100px;
+        }
+
+        .schedule-legend {
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+        }
+    }
+</style>
+{% endblock %}

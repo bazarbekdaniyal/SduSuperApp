@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t('admin.manage_subscribers') }} - SDU SuperApp{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1><i class="fas fa-users"></i> {{ t('admin.manage_subscribers') }}</h1>
+        <p>{{ t('admin.active_count', active=active_count, total=subscribers|length) }}</p>
+    </div>
+
+    <!-- Admin Navigation -->
+    <nav class="admin-nav">
+        <a href="{{ url_for('admin.dashboard') }}" class="admin-nav-link">
+            <i class="fas fa-tachometer-alt"></i> {{ t('admin.dashboard') }}
+        </a>
+        <a href="{{ url_for('admin.reviews') }}" class="admin-nav-link">
+            <i class="fas fa-comments"></i> {{ t('admin.reviews') }}
+        </a>
+        <a href="{{ url_for('admin.teachers') }}" class="admin-nav-link">
+            <i class="fas fa-chalkboard-teacher"></i> {{ t('admin.teachers') }}
+        </a>
+        <a href="{{ url_for('admin.news') }}" class="admin-nav-link">
+            <i class="fas fa-newspaper"></i> {{ t('admin.news') }}
+        </a>
+        <a href="{{ url_for('admin.subscribers') }}" class="admin-nav-link active">
+            <i class="fas fa-users"></i> {{ t('admin.subscribers') }}
+        </a>
+        <a href="{{ url_for('admin.orders') }}" class="admin-nav-link">
+            <i class="fas fa-shopping-bag"></i> {{ t('admin.orders') }}
+        </a>
+        <a href="{{ url_for('admin.products') }}" class="admin-nav-link">
+            <i class="fas fa-box"></i> {{ t('admin.products') }}
+        </a>
+        <a href="{{ url_for('admin.logout') }}" class="admin-nav-link logout-btn">
+            <i class="fas fa-sign-out-alt"></i> {{ t('admin.logout') }}
+        </a>
+    </nav>
+
+    {% if subscribers %}
+    <div class="admin-table-wrapper">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                <tr>
+                    <th>{{ t('admin.name') }}</th>
+                    <th>Email</th>
+                    <th>{{ t('admin.subscribed_at') }}</th>
+                    <th>{{ t('admin.language') }}</th>
+                    <th>{{ t('admin.categories') }}</th>
+                    <th>{{ t('admin.status') }}</th>
+                    <th>{{ t('admin.actions') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sub in subscribers %}
+                <tr>
+                    <td>{{ sub.name }}</td>
+                    <td>
+                        <a href="mailto:{{ sub.email }}">{{ sub.email }}</a>
+                    </td>
+                    <td>{{ sub.subscribed_at[:10] if sub.subscribed_at else '-' }}</td>
+                    <td>
+                        {% if sub.language == 'ru' %}
+                        <span class="category-tag" style="background: #3b82f6; color: white;">Русский</span>
+                        {% elif sub.language == 'en' %}
+                        <span class="category-tag" style="background: #10b981; color: white;">English</span>
+                        {% elif sub.language == 'kz' %}
+                        <span class="category-tag" style="background: #f59e0b; color: white;">Қазақша</span>
+                        {% else %}
+                        <span class="category-tag">{{ sub.language }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% for cat in sub.categories %}
+                        <span class="category-tag">{{ t('admin.' + cat|lower + 's') if cat|lower in ['announcement',
+                            'event'] else t('admin.' + cat|lower) }}</span>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        <span
+                            class="status-badge {% if sub.is_active %}status-approved{% else %}status-rejected{% endif %}">
+                            {{ t('admin.active') if sub.is_active else t('admin.inactive') }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <a href="{{ url_for('admin.edit_subscriber', subscriber_id=sub.id) }}"
+                                class="btn btn-sm btn-primary" title="{{ t('admin.edit') }}">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <form action="{{ url_for('admin.toggle_subscriber', subscriber_id=sub.id) }}" method="POST"
+                                style="display:inline;">
+                                <button type="submit"
+                                    class="btn btn-sm {% if sub.is_active %}btn-warning{% else %}btn-success{% endif %}"
+                                    title="{{ t('admin.deactivate') if sub.is_active else t('admin.activate') }}">
+                                    <i class="fas {% if sub.is_active %}fa-pause{% else %}fa-play{% endif %}"></i>
+                                </button>
+                            </form>
+
+                            <form action="{{ url_for('admin.delete_subscriber', subscriber_id=sub.id) }}" method="POST"
+                                style="display:inline;" data-confirm="{{ t('admin.delete_subscriber_confirm') }}"
+                                onsubmit="return confirm(this.getAttribute('data-confirm'));">
+                                <button type="submit" class="btn btn-sm btn-danger" title="{{ t('admin.delete') }}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-users"></i>
+        <h3>{{ t('admin.no_subscribers') }}</h3>
+        <p>{{ t('admin.no_subscribers_text') }}</p>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    .category-tag {
+        display: inline-block;
+        background: var(--bg-tertiary);
+        color: var(--text-secondary);
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        margin: 0.1rem;
+    }
+
+    .btn-warning {
+        background: var(--warning);
+        color: white;
+    }
+
+    .btn-warning:hover {
+        background: #d97706;
+    }
+
+    .btn-success {
+        background: var(--success);
+        color: white;
+    }
+
+    .btn-success:hover {
+        background: #16a34a;
+    }
+</style>
+{% endblock %}

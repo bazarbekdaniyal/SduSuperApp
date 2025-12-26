@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="{{ current_language }}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SDU SuperApp{% endblock %}</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/favicon.png') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{{ url_for('main.index') }}" class="nav-brand">
+                <i class="fas fa-graduation-cap"></i>
+                SDU SuperApp
+            </a>
+            <button class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="{{ url_for('main.index') }}" class="nav-link"><i class="fas fa-home"></i> {{ t('nav.home')
+                        }}</a></li>
+                <li><a href="{{ url_for('teachers.list_teachers') }}" class="nav-link"><i
+                            class="fas fa-chalkboard-teacher"></i> {{ t('nav.teachers') }}</a></li>
+                <li><a href="{{ url_for('rooms.list_rooms') }}" class="nav-link"><i class="fas fa-door-open"></i> {{
+                        t('nav.rooms') }}</a></li>
+                <li><a href="{{ url_for('news.list_news') }}" class="nav-link"><i class="fas fa-newspaper"></i> {{
+                        t('nav.news') }}</a></li>
+                <li><a href="{{ url_for('shop.list_products') }}" class="nav-link"><i class="fas fa-store"></i> {{
+                        t('nav.shop') }}</a></li>
+            </ul>
+            <ul class="nav-menu nav-menu-actions">
+                <li><a href="{{ url_for('shop.cart') }}" class="nav-link cart-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="mobile-label">{{ t('nav.cart') }}</span>
+                        {% if session.get('cart') %}
+                        <span class="cart-count">{{ session.get('cart')|length }}</span>
+                        {% endif %}
+                    </a></li>
+                <!-- Theme Toggle -->
+                <li>
+                    <button class="nav-link theme-toggle" id="themeToggle" title="Switch Theme">
+                        <i class="fas fa-moon"></i>
+                        <span class="mobile-label">Dark Mode</span>
+                    </button>
+                </li>
+                <li class="language-switcher">
+                    <div class="language-dropdown">
+                        <button class="nav-link language-btn" type="button">
+                            <i class="fas fa-globe"></i> {{ get_language_name(current_language) }}
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="language-menu">
+                            {% for lang in supported_languages %}
+                            <a href="{{ url_for('language.set_language', lang=lang) }}"
+                                class="language-option {% if lang == current_language %}active{% endif %}">
+                                {{ get_language_name(lang) }}
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </li>
+                <li><a href="{{ url_for('admin.dashboard') }}" class="nav-link">
+                        <i class="fas fa-cog"></i>
+                        <span class="mobile-label">{{ t('nav.admin') }}</span>
+                    </a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+                <button class="alert-close">&times;</button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3><i class="fas fa-graduation-cap"></i> {{ t('footer.title') }}</h3>
+                <p>{{ t('footer.description') }}</p>
+            </div>
+            <div class="footer-section">
+                <h4>{{ t('footer.navigation') }}</h4>
+                <ul>
+                    <li><a href="{{ url_for('teachers.list_teachers') }}">{{ t('nav.teachers') }}</a></li>
+                    <li><a href="{{ url_for('rooms.list_rooms') }}">{{ t('nav.rooms') }}</a></li>
+                    <li><a href="{{ url_for('news.list_news') }}">{{ t('nav.news') }}</a></li>
+                    <li><a href="{{ url_for('shop.list_products') }}">{{ t('nav.shop') }}</a></li>
+                    <li><a href="{{ url_for('main.about') }}">{{ t('footer.about') }}</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>{{ t('footer.contacts') }}</h4>
+                <p><i class="fas fa-map-marker-alt"></i> {{ t('footer.location') }}</p>
+                <p><i class="fas fa-envelope"></i> sdusuperapp@gmail.com</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>{{ t('footer.copyright') }}</p>
+            <p style="margin-top: 5px; font-size: 12px; opacity: 0.8;">{{ t('footer.developer') }}</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('navToggle').addEventListener('click', function () {
+            const navMenu = document.getElementById('navMenu');
+            const navMenuActions = document.querySelector('.nav-menu-actions');
+            navMenu.classList.toggle('active');
+            if (navMenuActions) {
+                navMenuActions.classList.toggle('active');
+            }
+        });
+
+        // Close flash messages
+        document.querySelectorAll('.alert-close').forEach(btn => {
+            btn.addEventListener('click', function () {
+                this.parentElement.remove();
+            });
+        });
+
+        // Language dropdown toggle
+        const languageBtn = document.querySelector('.language-btn');
+        const languageMenu = document.querySelector('.language-menu');
+        if (languageBtn && languageMenu) {
+            languageBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                languageMenu.classList.toggle('show');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function (e) {
+                if (!e.target.closest('.language-switcher')) {
+                    languageMenu.classList.remove('show');
+                }
+            });
+        }
+
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        const icon = themeToggle.querySelector('i');
+        const label = themeToggle.querySelector('.mobile-label');
+
+        // Check save theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', savedTheme);
+        updateIcon(savedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateIcon(newTheme);
+        });
+
+        function updateIcon(theme) {
+            if (theme === 'dark') {
+                icon.className = 'fas fa-sun';
+                label.textContent = 'Light Mode';
+            } else {
+                icon.className = 'fas fa-moon';
+                label.textContent = 'Dark Mode';
+            }
+        }
+    </script>
+
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

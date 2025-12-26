@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}{% if teacher %}{{ t('admin.edit_teacher') }}{% else %}{{ t('admin.add_teacher') }}{% endif %} - SDU
+SuperApp{% endblock %}
+
+{% block content %}
+<div class="container">
+    <a href="{{ url_for('admin.teachers') }}" class="back-link">
+        <i class="fas fa-arrow-left"></i> {{ t('admin.back_list') }}
+    </a>
+
+    <div class="page-header">
+        <h1><i class="fas fa-user-plus"></i> {% if teacher %}{{ t('admin.edit_teacher') }}{% else %}{{
+            t('admin.add_teacher') }}{% endif %}</h1>
+    </div>
+
+    <div class="form-card-page">
+        <form action="{{ url_for('admin.add_teacher') }}" method="POST" class="admin-form">
+            <div class="form-group">
+                <label for="name">{{ t('admin.full_name') }} *</label>
+                <input type="text" id="name" name="name" class="form-input" required
+                    value="{{ teacher.name if teacher else '' }}">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="position">{{ t('admin.position') }} *</label>
+                    <select id="position" name="position" class="form-select" required>
+                        <option value="Professor">Professor</option>
+                        <option value="Associate Professor">Associate Professor</option>
+                        <option value="Senior Lecturer">Senior Lecturer</option>
+                        <option value="Lecturer">Lecturer</option>
+                        <option value="Teaching Assistant">Teaching Assistant</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="department">{{ t('admin.department') }} *</label>
+                    <input type="text" id="department" name="department" class="form-input" required
+                        placeholder="Example: Faculty of Engineering"
+                        value="{{ teacher.department if teacher else '' }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" id="email" name="email" class="form-input" required placeholder="teacher@gmail.com"
+                    value="{{ teacher.email if teacher else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="subjects">{{ t('admin.subjects') }}</label>
+                <input type="text" id="subjects" name="subjects" class="form-input"
+                    placeholder="Algorithms, Data Structures, OOP"
+                    value="{{ teacher.subjects|join(', ') if teacher else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="bio">{{ t('admin.biography') }}</label>
+                <textarea id="bio" name="bio" class="form-input" rows="4"
+                    placeholder="{{ t('admin.biography') }}...">{{ teacher.bio if teacher else '' }}</textarea>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="fas fa-save"></i> {{ t('admin.save') }}
+                </button>
+                <a href="{{ url_for('admin.teachers') }}" class="btn btn-outline btn-lg">{{ t('admin.cancel') }}</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

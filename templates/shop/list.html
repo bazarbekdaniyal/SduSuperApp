@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t('shop.title') }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1><i class="fas fa-store"></i> {{ t('shop.page_title') }}</h1>
+        <p>{{ t('shop.page_subtitle') }}</p>
+    </div>
+
+    <div class="filters-section">
+        <form action="{{ url_for('shop.list_products') }}" method="GET" class="search-form">
+            <div class="search-input-group">
+                <input type="text" name="search" placeholder="{{ t('shop.search_placeholder') }}"
+                    value="{{ search_query or '' }}" class="form-input">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </form>
+
+        <div class="filter-buttons">
+            <a href="{{ url_for('shop.list_products') }}"
+                class="filter-btn {% if not current_category %}active{% endif %}">
+                {{ t('shop.all') }}
+            </a>
+            {% for cat in categories %}
+            <a href="{{ url_for('shop.list_products', category=cat) }}"
+                class="filter-btn {% if current_category == cat %}active{% endif %}">
+                {{ cat }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% if products %}
+    <div class="products-grid">
+        {% for product in products %}
+        <div class="product-card">
+            <a href="{{ url_for('shop.product_detail', product_id=product.id) }}" class="product-card-link"
+                style="text-decoration: none; color: inherit;">
+                {% if product.image %}
+                <div class="product-image">
+                    <img src="{{ product.image }}" alt="{{ product.name }}">
+                </div>
+                {% else %}
+                <div class="product-image product-placeholder">
+                    <i class="fas fa-image"></i>
+                </div>
+                {% endif %}
+                <div class="product-info">
+                    <span class="product-category">{{ product.category }}</span>
+                    <h3>{{ product.name }}</h3>
+                    <p class="product-description">{{ product.description[:80] }}{% if product.description|length > 80
+                        %}...{% endif %}</p>
+                    <div class="product-footer">
+                        <span class="product-price">{{ "%.0f"|format(product.price) }} ₸</span>
+                        <span class="product-stock">
+                            {% if product.stock > 0 %}
+                            <i class="fas fa-check-circle"></i> {{ t('shop.in_stock') }}
+                            {% else %}
+                            <i class="fas fa-times-circle"></i> {{ t('shop.out_of_stock') }}
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </a>
+            <div class="product-actions-footer" style="padding: 0 1.5rem 1.5rem;">
+                {% if product.stock > 0 %}
+                {% if product.id in cart_product_ids %}
+                <a href="{{ url_for('shop.cart') }}" class="btn btn-success btn-block">
+                    <i class="fas fa-shopping-cart"></i> {{ t('shop.go_to_cart') }}
+                </a>
+                {% else %}
+                <form action="{{ url_for('shop.add_to_cart', product_id=product.id) }}" method="POST"
+                    class="add-to-cart-form">
+                    <input type="hidden" name="quantity" value="1">
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <i class="fas fa-cart-plus"></i> {{ t('common.add_to_cart') }}
+                    </button>
+                </form>
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-box-open"></i>
+        <h3>{{ t('shop.not_found') }}</h3>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

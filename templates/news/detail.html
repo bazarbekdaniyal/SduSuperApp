@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}{{ news.title }} - SDU SuperApp{% endblock %}
+
+{% block content %}
+<div class="container">
+    <a href="{{ url_for('news.list_news') }}" class="back-link">
+        <i class="fas fa-arrow-left"></i> {{ t('news.back_to_news') }}
+    </a>
+
+    <div class="news-detail-layout">
+        <article class="news-article">
+            <header class="article-header">
+                <span class="news-category">{{ news.category }}</span>
+                <h1>{{ news.title }}</h1>
+                <div class="article-meta">
+                    <span><i class="fas fa-user"></i> {{ news.author }}</span>
+                    <span><i class="fas fa-calendar"></i> {{ news.created_at[:10] }}</span>
+                    <span><i class="fas fa-eye"></i> {{ news.views_count }} {{ t('news.views_count') }}</span>
+                </div>
+            </header>
+
+            {% if news.image %}
+            <div class="article-image">
+                <img src="{{ news.image }}" alt="{{ news.title }}">
+            </div>
+            {% endif %}
+
+            <div class="article-content">
+                {{ news.content|safe }}
+            </div>
+        </article>
+
+        <aside class="news-sidebar">
+            <div class="sidebar-card">
+                <h3><i class="fas fa-fire"></i> {{ t('news.popular') }}</h3>
+                <ul class="popular-list">
+                    {% for article in popular_news %}
+                    <li>
+                        <a href="{{ url_for('news.news_detail', news_id=article.id) }}">
+                            {{ article.title }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </aside>
+    </div>
+</div>
+{% endblock %}
+

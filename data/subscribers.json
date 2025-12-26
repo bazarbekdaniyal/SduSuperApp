@@ -1,0 +1,13 @@
+[
+  {
+    "id": "a4ff2f8b-5e47-446a-82b4-09ac51a61448",
+    "email": "test@gmail.com",
+    "name": "Daniyal Bazarbek",
+    "subscribed_at": "2025-12-24T22:07:36.001124",
+    "is_active": true,
+    "categories": [
+      "all"
+    ],
+    "language": "ru"
+  }
+]
