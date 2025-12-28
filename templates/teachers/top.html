@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Top Teachers - SDU SuperApp{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1><i class="fas fa-trophy"></i> Top Teachers by Rating</h1>
+    </div>
+
+    {% if teachers %}
+    <div class="teachers-list">
+        {% for teacher in teachers %}
+        <a href="{{ url_for('teachers.teacher_detail', teacher_id=teacher.id) }}" class="teacher-card-horizontal">
+            <div class="teacher-avatar">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="teacher-info">
+                <h3>
+                    {% if loop.index <= 3 %} <span
+                        style="color: {% if loop.index == 1 %}gold{% elif loop.index == 2 %}silver{% else %}#cd7f32{% endif %}">
+                        {% if loop.index == 1 %}🥇{% elif loop.index == 2 %}🥈{% else %}🥉{% endif %}
+                        </span>
+                        {% else %}
+                        <span style="color: var(--text-muted); font-weight: normal;">#{{ loop.index }}</span>
+                        {% endif %}
+                        {{ teacher.full_name_en }}
+                </h3>
+                {% if teacher.full_name_kz %}
+                <p class="teacher-name-kz">{{ teacher.full_name_kz }}</p>
+                {% endif %}
+                {% if teacher.level %}
+                <p class="teacher-level"><i class="fas fa-graduation-cap"></i> {{ teacher.level }}</p>
+                {% endif %}
+            </div>
+            <div class="teacher-stats">
+                <div class="rating-box">
+                    <div class="rating-value">{{ "%.1f"|format(teacher.rating) }}</div>
+                    <div class="rating-stars">
+                        {% for i in range(5) %}
+                        {% if i < teacher.rating|int %} <i class="fas fa-star"></i>
+                            {% else %}
+                            <i class="far fa-star"></i>
+                            {% endif %}
+                            {% endfor %}
+                    </div>
+                    <div class="rating-count">{{ teacher.reviews_count }} reviews</div>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-users"></i>
+        <h3>No teacher data found</h3>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

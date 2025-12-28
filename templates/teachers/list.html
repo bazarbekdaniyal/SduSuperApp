@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t('teachers.title') }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1><i class="fas fa-chalkboard-teacher"></i> {{ t('teachers.page_title') }}</h1>
+        <p>{{ t('teachers.page_subtitle') }}</p>
+    </div>
+
+    <div class="filters-section">
+        <form action="{{ url_for('teachers.list_teachers') }}" method="GET" class="search-form">
+            <div class="search-input-group">
+                <input type="text" name="search" placeholder="{{ t('teachers.search_placeholder') }}"
+                    value="{{ search_query or '' }}" class="form-input">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </form>
+
+        <div class="filter-buttons">
+            <a href="{{ url_for('teachers.list_teachers') }}"
+                class="filter-btn {% if not current_level %}active{% endif %}">
+                {{ t('teachers.all') }}
+            </a>
+            {% for lvl in levels %}
+            <a href="{{ url_for('teachers.list_teachers', level=lvl) }}"
+                class="filter-btn {% if current_level == lvl %}active{% endif %}">
+                {{ lvl }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% if teachers %}
+    <div class="teachers-list">
+        {% for teacher in teachers %}
+        <a href="{{ url_for('teachers.teacher_detail', teacher_id=teacher.id) }}" class="teacher-card-horizontal">
+            <div class="teacher-avatar">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="teacher-info">
+                <h3>{{ teacher.full_name_en }}</h3>
+                {% if teacher.full_name_kz %}
+                <p class="teacher-name-kz">{{ teacher.full_name_kz }}</p>
+                {% endif %}
+                {% if teacher.level %}
+                <p class="teacher-level"><i class="fas fa-graduation-cap"></i> {{ teacher.level }}</p>
+                {% endif %}
+            </div>
+            <div class="teacher-stats">
+                <div class="rating-box">
+                    <div class="rating-value">{{ "%.1f"|format(teacher.rating) }}</div>
+                    <div class="rating-stars">
+                        {% for i in range(5) %}
+                        {% if i < teacher.rating|int %} <i class="fas fa-star"></i>
+                            {% elif i < teacher.rating %} <i class="fas fa-star-half-alt"></i>
+                                {% else %}
+                                <i class="far fa-star"></i>
+                                {% endif %}
+                                {% endfor %}
+                    </div>
+                    <div class="rating-count">{{ teacher.reviews_count }} {{ t('common.reviews') }}</div>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if total_pages > 1 %}
+    <div class="pagination-container"
+        style="display: flex; justify-content: center; margin-top: 2rem; gap: 0.5rem; flex-wrap: wrap;">
+        {% if page > 1 %}
+        <a href="{{ url_for('teachers.list_teachers', page=page-1, level=current_level, search=search_query) }}"
+            class="btn btn-outline">
+            <i class="fas fa-chevron-left"></i> {{ t('common.prev') }}
+        </a>
+        {% endif %}
+
+        {% for p in range(1, total_pages + 1) %}
+        {% if p == page %}
+        <span class="btn btn-primary">{{ p }}</span>
+        {% else %}
+        {% set is_mobile = (p == 1 or p == total_pages or (p >= page - 1 and p <= page + 1)) %} <a
+            href="{{ url_for('teachers.list_teachers', page=p, level=current_level, search=search_query) }}"
+            class="btn btn-outline {% if not is_mobile %}mobile-hidden{% endif %}">{{ p }}</a>
+            {% endif %}
+
+            {# Ellipses for Mobile #}
+            {% if p == 1 and page > 3 %}
+            <span class="btn btn-outline disabled mobile-only">...</span>
+            {% endif %}
+
+            {% if p == total_pages - 1 and page < total_pages - 2 %} <span class="btn btn-outline disabled mobile-only">
+                ...</span>
+                {% endif %}
+                {% endfor %}
+
+                {% if page < total_pages %} <a
+                    href="{{ url_for('teachers.list_teachers', page=page+1, level=current_level, search=search_query) }}"
+                    class="btn btn-outline">
+                    {{ t('common.next') }} <i class="fas fa-chevron-right"></i>
+                    </a>
+                    {% endif %}
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-search"></i>
+        <h3>{{ t('teachers.not_found_title') }}</h3>
+        <p>{{ t('teachers.not_found') }}</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

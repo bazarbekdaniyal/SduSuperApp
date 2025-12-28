@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+
+{% block title %}{{ teacher.full_name_en }} - SDU SuperApp{% endblock %}
+
+{% block content %}
+<div class="container">
+    <a href="{{ url_for('teachers.list_teachers') }}" class="back-link">
+        <i class="fas fa-arrow-left"></i> {{ t('teachers.back_to_list') }}
+    </a>
+
+    <div class="teacher-profile">
+        <div class="profile-header">
+            <div class="profile-avatar">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="profile-info">
+                <h1>{{ teacher.full_name_en }}</h1>
+                {% if teacher.full_name_kz %}
+                <p class="profile-name-kz">{{ teacher.full_name_kz }}</p>
+                {% endif %}
+                {% if teacher.level %}
+                <p class="profile-level"><i class="fas fa-graduation-cap"></i> {{ teacher.level }}</p>
+                {% endif %}
+
+                <div class="profile-rating">
+                    <div class="rating-big">
+                        <span class="rating-number">{{ "%.1f"|format(rating[0]) }}</span>
+                        <div class="rating-stars-big">
+                            {% for i in range(5) %}
+                            {% if i < rating[0]|int %} <i class="fas fa-star"></i>
+                                {% elif i < rating[0] %} <i class="fas fa-star-half-alt"></i>
+                                    {% else %}
+                                    <i class="far fa-star"></i>
+                                    {% endif %}
+                                    {% endfor %}
+                        </div>
+                        <span class="rating-count-text">{{ rating[1] }} reviews</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Расписание -->
+    <div class="section-card">
+        <h2><i class="fas fa-calendar-alt"></i> {{ t('teachers.schedule') }}</h2>
+        {% set ns = namespace(has_schedule=false) %}
+        {% for day, lessons in schedule.items() %}
+        {% if lessons %}
+        {% set ns.has_schedule = true %}
+        {% endif %}
+        {% endfor %}
+
+        {% if ns.has_schedule %}
+        <div class="schedule-grid-container">
+            <table class="schedule-grid">
+                <thead>
+                    <tr>
+                        <th class="time-header">{{ t('schedule.time') }}</th>
+                        <th>{{ t('schedule.monday') }}</th>
+                        <th>{{ t('schedule.tuesday') }}</th>
+                        <th>{{ t('schedule.wednesday') }}</th>
+                        <th>{{ t('schedule.thursday') }}</th>
+                        <th>{{ t('schedule.friday') }}</th>
+                        <th>{{ t('schedule.saturday') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% set time_slots = [
+                    ('08:30', '09:20'), ('09:30', '10:20'), ('10:30', '11:20'),
+                    ('11:30', '12:20'), ('12:30', '13:20'), ('13:30', '14:20'),
+                    ('14:30', '15:20'), ('15:30', '16:20'), ('16:30', '17:20'),
+                    ('17:30', '18:20'), ('18:30', '19:20'), ('19:30', '20:20')
+                    ] %}
+                    {% set days_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'] %}
+
+                    {% for start, end in time_slots %}
+                    {% set ns_row = namespace(has_lesson=false) %}
+                    {% for day in days_order %}
+                    {% for lesson in schedule.get(day, []) %}
+                    {% if lesson.start_time == start %}
+                    {% set ns_row.has_lesson = true %}
+                    {% endif %}
+                    {% endfor %}
+                    {% endfor %}
+
+                    {% if ns_row.has_lesson %}
+                    <tr>
+                        <td class="time-cell">{{ start }}<br>{{ end }}</td>
+                        {% for day in days_order %}
+                        {% set ns_cell = namespace(found=false) %}
+                        {% for lesson in schedule.get(day, []) %}
+                        {% if lesson.start_time == start %}
+                        {% set ns_cell.found = true %}
+                        <td class="lesson-cell lesson-type-{{ lesson.type|lower }}">
+                            <div class="lesson-code">{{ lesson.code }}</div>
+                            <div class="lesson-name">{{ lesson.name_en[:25] }}{% if lesson.name_en|length > 25 %}...{%
+                                endif %}</div>
+                            <div class="lesson-room"><i class="fas fa-map-marker-alt"></i> {{ lesson.room }}</div>
+                            <div class="lesson-type-badge">{{ lesson.lesson_type }}</div>
+                        </td>
+                        {% endif %}
+                        {% endfor %}
+                        {% if not ns_cell.found %}
+                        <td class="empty-cell">—</td>
+                        {% endif %}
+                        {% endfor %}
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state-small">
+            <p>No schedule available</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Отзывы -->
+    <div class="section-card">
+        <h2><i class="fas fa-comments"></i> {{ t('teachers.reviews') }}</h2>
+
+        <!-- Форма добавления отзыва -->
+        <div class="review-form-card">
+            <h3>Оставить отзыв</h3>
+            <form action="{{ url_for('reviews.add_review', teacher_id=teacher.id) }}" method="POST">
+                <div class="form-group">
+                    <label>{{ t('teachers.review_form_name_label') }}</label>
+                    <input type="text" name="author_name" class="form-input"
+                        placeholder="{{ t('teachers.review_form_name') }}">
+                </div>
+                <div class="form-group">
+                    <label>{{ t('teachers.review_form_rating_label') }}</label>
+                    <div class="rating-input">
+                        {% for i in range(5, 0, -1) %}
+                        <input type="radio" name="rating" value="{{ i }}" id="star{{ i }}" {% if i==5 %} checked{% endif
+                            %}>
+                        <label for="star{{ i }}"><i class="fas fa-star"></i></label>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>{{ t('teachers.review_form_comment_label') }}</label>
+                    <textarea name="comment" class="form-input" rows="4"
+                        placeholder="{{ t('teachers.review_form_comment') }}" required></textarea>
+                </div>
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" name="is_anonymous" id="is_anonymous">
+                    <label for="is_anonymous">{{ t('teachers.review_form_anonymous') }}</label>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i> Submit Review
+                </button>
+            </form>
+        </div>
+
+        <!-- Распределение оценок -->
+        {% if rating_distribution %}
+        <div class="rating-distribution">
+            {% for star in range(5, 0, -1) %}
+            <div class="rating-bar">
+                <span class="rating-label">{{ star }} <i class="fas fa-star"></i></span>
+                <div class="rating-bar-bg">
+                    {% set total = rating[1] if rating[1] > 0 else 1 %}
+                    {% set percent = (rating_distribution[star] / total * 100)|round %}
+                    <div class="rating-bar-fill" style="width: {{ percent }}%"></div>
+                </div>
+                <span class="rating-count">{{ rating_distribution[star] }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Список отзывов -->
+        {% if reviews %}
+        <div class="reviews-list">
+            {% for review in reviews %}
+            <div class="review-card">
+                <div class="review-header">
+                    <span class="review-author">
+                        <i class="fas fa-user-circle"></i>
+                        {{ review.author_name }}
+                    </span>
+                    <div class="review-rating">
+                        {% for i in range(5) %}
+                        {% if i < review.rating %} <i class="fas fa-star"></i>
+                            {% else %}
+                            <i class="far fa-star"></i>
+                            {% endif %}
+                            {% endfor %}
+                    </div>
+                    {% if session.get('admin_logged_in') %}
+                    <form action="{{ url_for('admin.delete_review', review_id=review.id) }}" method="POST"
+                        style="display: inline; margin-left: auto;"
+                        onsubmit="return confirm('Are you sure you want to delete this review?');">
+                        <input type="hidden" name="redirect_url" value="{{ request.url }}">
+                        <button type="submit" class="btn btn-danger btn-sm" title="Удалить отзыв">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+                <p class="review-comment">{{ review.comment }}</p>
+                <span class="review-date">{{ review.created_at[:10] }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state-small">
+            <p>{{ t('teachers.no_reviews') }}</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

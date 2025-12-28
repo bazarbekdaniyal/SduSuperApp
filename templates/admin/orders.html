@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t('admin.manage_orders') }} - SDU SuperApp{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1><i class="fas fa-shopping-bag"></i> {{ t('admin.manage_orders') }}</h1>
+    </div>
+
+    <nav class="admin-nav">
+        <a href="{{ url_for('admin.dashboard') }}" class="admin-nav-link">
+            <i class="fas fa-tachometer-alt"></i> {{ t('admin.dashboard') }}
+        </a>
+        <a href="{{ url_for('admin.reviews') }}" class="admin-nav-link">
+            <i class="fas fa-comments"></i> {{ t('admin.reviews') }}
+        </a>
+        <a href="{{ url_for('admin.teachers') }}" class="admin-nav-link">
+            <i class="fas fa-chalkboard-teacher"></i> {{ t('admin.teachers') }}
+        </a>
+        <a href="{{ url_for('admin.news') }}" class="admin-nav-link">
+            <i class="fas fa-newspaper"></i> {{ t('admin.news') }}
+        </a>
+        <a href="{{ url_for('admin.subscribers') }}" class="admin-nav-link">
+            <i class="fas fa-users"></i> {{ t('admin.subscribers') }}
+        </a>
+        <a href="{{ url_for('admin.orders') }}" class="admin-nav-link active">
+            <i class="fas fa-shopping-bag"></i> {{ t('admin.orders') }}
+        </a>
+        <a href="{{ url_for('admin.products') }}" class="admin-nav-link">
+            <i class="fas fa-box"></i> {{ t('admin.products') }}
+        </a>
+        <a href="{{ url_for('admin.logout') }}" class="admin-nav-link logout-btn">
+            <i class="fas fa-sign-out-alt"></i> {{ t('admin.logout') }}
+        </a>
+    </nav>
+
+    {% if orders %}
+    <div class="admin-table-wrapper">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>{{ t('admin.id') }}</th>
+                    <th>{{ t('admin.customer') }}</th>
+                    <th>Email</th>
+                    <th>{{ t('admin.delivery_address') }}</th>
+                    <th>Total</th>
+                    <th>{{ t('admin.items') }}</th>
+                    <th>{{ t('admin.date') }}</th>
+                    <th>{{ t('admin.status') }}</th>
+                    <th>{{ t('admin.actions') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.id[:8] }}...</td>
+                    <td>{{ order.customer_name }}</td>
+                    <td>{{ order.customer_email }}</td>
+                    <td class="address-cell">
+                        {% if order.delivery_address %}
+                        <div class="table-address" title="{{ order.delivery_address }}">
+                            {{ order.delivery_address }}
+                        </div>
+                        {% else %}
+                        <span class="text-muted">—</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ "%.0f"|format(order.total_amount) }} ₸</td>
+                    <td>
+                        <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.9em;">
+                            {% for item in order.items %}
+                            <li style="margin-bottom: 2px;">
+                                {{ item.name }} <span class="text-muted">x{{ item.quantity }}</span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td>{{ order.created_at[:10] }} {{ order.created_at[11:16] }}</td>
+                    <td>
+                        <span class="status-badge status-{{ order.status|lower }}">{{ t('admin.' + order.status|lower)
+                            }}</span>
+                    </td>
+                    <td>
+                        {% if order.status == 'Pending' %}
+                        <div class="action-buttons">
+                            <form action="{{ url_for('admin.confirm_order', order_id=order.id) }}" method="POST"
+                                style="display:inline;">
+                                <button type="submit" class="btn btn-sm btn-success" title="{{ t('admin.confirm') }}"><i
+                                        class="fas fa-check"></i></button>
+                            </form>
+                            <form action="{{ url_for('admin.cancel_order', order_id=order.id) }}" method="POST"
+                                style="display:inline;">
+
+                                <button type="submit" class="btn btn-sm btn-danger" title="{{ t('admin.cancel') }}"
+                                    data-confirm="{{ t('admin.cancel_confirm') }}"
+                                    onclick="return confirm(this.getAttribute('data-confirm'))"><i
+                                        class="fas fa-times"></i></button>
+
+                            </form>
+                        </div>
+                        {% elif order.status == 'Confirmed' %}
+                        <form action="{{ url_for('admin.cancel_order', order_id=order.id) }}" method="POST"
+                            style="display: inline;">
+                            <button class="btn btn-sm btn-danger"
+                                onclick="return confirm('Are you sure you want to cancel this order?')">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </form>
+                        {% else %}
+                        <span class="text-muted">—</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-shopping-bag"></i>
+        <h3>{{ t('admin.no_orders') }}</h3>
+        <p>{{ t('admin.no_orders_text') }}</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

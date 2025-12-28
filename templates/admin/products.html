@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t('admin.manage_products') }} - SDU SuperApp{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1><i class="fas fa-box"></i> {{ t('admin.manage_products') }}</h1>
+        <a href="{{ url_for('admin.add_product') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> {{ t('admin.add_product') }}
+        </a>
+    </div>
+
+    <nav class="admin-nav">
+        <a href="{{ url_for('admin.dashboard') }}" class="admin-nav-link">
+            <i class="fas fa-tachometer-alt"></i> {{ t('admin.dashboard') }}
+        </a>
+        <a href="{{ url_for('admin.reviews') }}" class="admin-nav-link">
+            <i class="fas fa-comments"></i> {{ t('admin.reviews') }}
+        </a>
+        <a href="{{ url_for('admin.teachers') }}" class="admin-nav-link">
+            <i class="fas fa-chalkboard-teacher"></i> {{ t('admin.teachers') }}
+        </a>
+        <a href="{{ url_for('admin.news') }}" class="admin-nav-link">
+            <i class="fas fa-newspaper"></i> {{ t('admin.news') }}
+        </a>
+        <a href="{{ url_for('admin.subscribers') }}" class="admin-nav-link">
+            <i class="fas fa-users"></i> {{ t('admin.subscribers') }}
+        </a>
+        <a href="{{ url_for('admin.orders') }}" class="admin-nav-link">
+            <i class="fas fa-shopping-bag"></i> {{ t('admin.orders') }}
+        </a>
+        <a href="{{ url_for('admin.products') }}" class="admin-nav-link active">
+            <i class="fas fa-box"></i> {{ t('admin.products') }}
+        </a>
+        <a href="{{ url_for('admin.logout') }}" class="admin-nav-link logout-btn">
+            <i class="fas fa-sign-out-alt"></i> {{ t('admin.logout') }}
+        </a>
+    </nav>
+
+    {% if products %}
+    <div class="admin-table-wrapper">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>{{ t('admin.photo') }}</th>
+                    <th>{{ t('admin.name') }}</th>
+                    <th>{{ t('admin.category') }}</th>
+                    <th>{{ t('admin.price') }}</th>
+                    <th>{{ t('admin.stock') }}</th>
+                    <th>{{ t('admin.status') }}</th>
+                    <th>{{ t('admin.actions') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <td>
+                        {% if product.image %}
+                        <img src="{{ product.image }}" alt="{{ product.name }}"
+                            style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
+                        {% else %}
+                        <div
+                            style="width: 50px; height: 50px; background: #eee; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-image" style="color: #ccc;"></i>
+                        </div>
+                        {% endif %}
+                    </td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.category }}</td>
+                    <td>{{ "%.0f"|format(product.price) }} ₸</td>
+                    <td>{{ product.stock }}</td>
+                    <td>
+                        <span
+                            class="status-badge {% if product.stock > 0 %}status-approved{% else %}status-rejected{% endif %}">
+                            {{ t('admin.in_stock') if product.stock > 0 else t('admin.out_of_stock') }}
+                        </span>
+                    </td>
+                    <td>
+                        <a href="{{ url_for('admin.edit_product', product_id=product.id) }}"
+                            class="btn btn-sm btn-outline" title="{{ t('admin.edit') }}">
+                            <i class="fas fa-edit"></i>
+                        </a>
+
+                        <form action="{{ url_for('admin.delete_product', product_id=product.id) }}" method="POST"
+                            style="display:inline;" data-confirm="{{ t('admin.delete_product_confirm') }}"
+                            onsubmit="return confirm(this.getAttribute('data-confirm'));">
+                            <button type="submit" class="btn btn-sm btn-danger" title="{{ t('admin.delete') }}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-box-open"></i>
+        <h3>{{ t('admin.no_products') }}</h3>
+        <a href="{{ url_for('admin.add_product') }}" class="btn btn-primary">{{ t('admin.add_product') }}</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

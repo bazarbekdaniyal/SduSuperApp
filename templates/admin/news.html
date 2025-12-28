@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t('admin.manage_news') }} - SDU SuperApp{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1><i class="fas fa-newspaper"></i> {{ t('admin.manage_news') }}</h1>
+        <a href="{{ url_for('admin.add_news') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> {{ t('admin.add_news') }}
+        </a>
+    </div>
+
+    <!-- Admin Navigation -->
+    <nav class="admin-nav">
+        <a href="{{ url_for('admin.dashboard') }}" class="admin-nav-link">
+            <i class="fas fa-tachometer-alt"></i> {{ t('admin.dashboard') }}
+        </a>
+        <a href="{{ url_for('admin.reviews') }}" class="admin-nav-link">
+            <i class="fas fa-comments"></i> {{ t('admin.reviews') }}
+        </a>
+        <a href="{{ url_for('admin.teachers') }}" class="admin-nav-link">
+            <i class="fas fa-chalkboard-teacher"></i> {{ t('admin.teachers') }}
+        </a>
+        <a href="{{ url_for('admin.news') }}" class="admin-nav-link active">
+            <i class="fas fa-newspaper"></i> {{ t('admin.news') }}
+        </a>
+        <a href="{{ url_for('admin.subscribers') }}" class="admin-nav-link">
+            <i class="fas fa-users"></i> {{ t('admin.subscribers') }}
+        </a>
+        <a href="{{ url_for('admin.orders') }}" class="admin-nav-link">
+            <i class="fas fa-shopping-bag"></i> {{ t('admin.orders') }}
+        </a>
+        <a href="{{ url_for('admin.products') }}" class="admin-nav-link">
+            <i class="fas fa-box"></i> {{ t('admin.products') }}
+        </a>
+        <a href="{{ url_for('admin.logout') }}" class="admin-nav-link logout-btn">
+            <i class="fas fa-sign-out-alt"></i> {{ t('admin.logout') }}
+        </a>
+    </nav>
+
+    {% if news %}
+    <div class="admin-table-wrapper">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>{{ t('admin.title') }}</th>
+                    <th>{{ t('admin.category') }}</th>
+                    <th>{{ t('admin.author') }}</th>
+                    <th>{{ t('admin.date') }}</th>
+                    <th>{{ t('admin.views') }}</th>
+                    <th>{{ t('admin.status') }}</th>
+                    <th>{{ t('admin.actions') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for article in news %}
+                <tr>
+                    <td>
+                        <a href="{{ url_for('news.news_detail', news_id=article.id) }}">
+                            {{ article.title[:50] }}{% if article.title|length > 50 %}...{% endif %}
+                        </a>
+                    </td>
+                    <td><span class="news-category">{{ article.category }}</span></td>
+                    <td>{{ article.author }}</td>
+                    <td>{{ article.created_at[:10] if article.created_at else '-' }}</td>
+                    <td>{{ article.views_count }}</td>
+                    <td>
+                        <span
+                            class="status-badge {% if article.is_published %}status-approved{% else %}status-pending{% endif %}">
+                            {{ t('admin.published') if article.is_published else t('admin.draft') }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <a href="{{ url_for('news.news_detail', news_id=article.id) }}"
+                                class="btn btn-sm btn-outline" title="View">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="{{ url_for('admin.edit_news', news_id=article.id) }}"
+                                class="btn btn-sm btn-primary" title="{{ t('admin.edit') }}">
+                                <i class="fas fa-edit"></i>
+                            </a>
+
+                            <form action="{{ url_for('admin.delete_news', news_id=article.id) }}" method="POST"
+                                style="display:inline;" data-confirm="{{ t('admin.delete_news_confirm') }}"
+                                onsubmit="return confirm(this.getAttribute('data-confirm'));">
+                                <button type="submit" class="btn btn-sm btn-danger" title="{{ t('admin.delete') }}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-newspaper"></i>
+        <h3>{{ t('admin.no_news') }}</h3>
+        <p>{{ t('admin.add_first_news') }}</p>
+        <a href="{{ url_for('admin.add_news') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> {{ t('admin.add_news') }}
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,269 @@
+{% extends "base.html" %}
+
+{% block title %}{% if product %}{{ t('admin.edit_product') }}{% else %}{{ t('admin.add_product') }}{% endif %} - SDU
+SuperApp{% endblock %}
+
+{% block content %}
+<div class="container">
+    <a href="{{ url_for('admin.products') }}" class="back-link">
+        <i class="fas fa-arrow-left"></i> {{ t('admin.back_list') }}
+    </a>
+
+    <div class="page-header">
+        <h1><i class="fas fa-{% if product %}edit{% else %}plus{% endif %}"></i> {% if product %}{{
+            t('admin.edit_product') }}{% else %}{{ t('admin.add_product') }}{%
+            endif %}</h1>
+    </div>
+
+    <div class="form-card-page">
+        <form
+            action="{% if product %}{{ url_for('admin.edit_product', product_id=product.id) }}{% else %}{{ url_for('admin.add_product') }}{% endif %}"
+            method="POST" class="admin-form" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="name">{{ t('admin.name') }} *</label>
+                <input type="text" id="name" name="name" class="form-input" required
+                    value="{% if product %}{{ product.name }}{% endif %}">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="category">{{ t('admin.category') }} *</label>
+                    <select id="category" name="category" class="form-select" required>
+                        <option value="Clothing" {% if product and product.category=='Clothing' %}selected{% endif %}>
+                            Clothing</option>
+                        <option value="Accessories" {% if product and product.category=='Accessories' %}selected{% endif
+                            %}>Accessories</option>
+                        <option value="Stationery" {% if product and product.category=='Stationery' %}selected{% endif
+                            %}>Stationery</option>
+                        <option value="Books" {% if product and product.category=='Books' %}selected{% endif %}>Books
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="price">{{ t('admin.price') }} (₸) *</label>
+                    <input type="number" id="price" name="price" class="form-input" min="0" step="100" required
+                        value="{{ product.price if product else '' }}">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="stock">{{ t('admin.stock') }} *</label>
+                    <input type="number" id="stock" name="stock" class="form-input" min="0" required
+                        value="{{ product.stock if product else 0 }}">
+                </div>
+                <div class="form-group">
+                    <label for="is_active">{{ t('admin.available_sale') }}</label>
+                    <select id="is_active" name="is_active" class="form-select">
+                        <option value="yes" {% if not product or product.stock> 0 %}selected{% endif %}>{{
+                            t('admin.yes') }}</option>
+                        <option value="no" {% if product and product.stock==0 %}selected{% endif %}>{{ t('admin.no') }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Image Upload -->
+            <div class="form-group">
+                <label>{{ t('admin.product_image') }}</label>
+                <div class="image-upload-tabs">
+                    <div class="upload-tab-buttons">
+                        <button type="button" class="tab-btn active" onclick="showTab('upload')">
+                            <i class="fas fa-upload"></i> {{ t('admin.upload_pc') }}
+                        </button>
+                        <button type="button" class="tab-btn" onclick="showTab('url')">
+                            <i class="fas fa-link"></i> {{ t('admin.image_url') }}
+                        </button>
+                    </div>
+
+                    <div id="upload-tab" class="upload-tab-content active">
+                        <input type="file" id="image_file" name="image_file" class="form-input"
+                            accept="image/png,image/jpeg,image/jpg,image/gif,image/webp" onchange="previewImage(this)">
+                        <small class="form-hint">{{ t('admin.formats') }} <strong>500x500
+                                px</strong></small>
+                        <div id="new-image-preview" style="display: none; margin-top: 1rem;">
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">{{
+                                t('admin.new_image') }}</p>
+                            <img id="preview-img" src="" alt="Preview"
+                                style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 2px solid var(--primary);">
+                        </div>
+                    </div>
+
+                    <div id="url-tab" class="upload-tab-content">
+                        <input type="url" id="image_url" name="image_url" class="form-input"
+                            value="{% if product and product.image and not product.image.startswith('/static') %}{{ product.image }}{% endif %}"
+                            placeholder="https://example.com/product.jpg" oninput="previewUrlImage(this)">
+                        <small class="form-hint">{{ t('admin.enter_link') }}</small>
+                        <div id="url-image-preview" style="display: none; margin-top: 1rem;">
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">{{
+                                t('admin.preview') }}
+                            </p>
+                            <img id="url-preview-img" src="" alt="Preview"
+                                style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 2px solid var(--primary);">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% if product and product.image %}
+            <div class="form-group">
+                <label>{{ t('admin.current_image') }}</label>
+                <div class="image-preview">
+                    <img src="{{ product.image }}" alt="{{ product.name }}"
+                        style="max-width: 200px; max-height: 200px; border-radius: 8px;">
+                    <input type="hidden" name="current_image" value="{{ product.image }}">
+                    <button type="button" class="btn btn-sm btn-danger" style="margin-top: 0.5rem;"
+                        onclick="removeImage()">
+                        <i class="fas fa-times"></i> {{ t('admin.delete_image') }}
+                    </button>
+                    <input type="hidden" name="remove_image" id="remove_image" value="no">
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="form-group">
+                <label for="description">{{ t('admin.description') }}</label>
+                <textarea id="description" name="description" class="form-input" rows="5"
+                    placeholder="{{ t('admin.description') }}...">{{ product.description if product else '' }}</textarea>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="fas fa-save"></i> {{ t('admin.save') }}
+                </button>
+                <a href="{{ url_for('admin.products') }}" class="btn btn-outline btn-lg">{{ t('admin.cancel') }}</a>
+                {% if product %}
+                <button type="button" class="btn btn-danger btn-lg" onclick="confirmDelete()">
+                    <i class="fas fa-trash"></i> {{ t('admin.delete') }}
+                </button>
+                {% endif %}
+            </div>
+        </form>
+
+        {% if product %}
+        <form id="delete-form" action="{{ url_for('admin.delete_product', product_id=product.id) }}" method="POST"
+            style="display: none;">
+        </form>
+        {% endif %}
+    </div>
+</div>
+
+{% if product %}
+<script>
+    function confirmDelete() {
+        if (confirm("{{ t('admin.delete_product_confirm') }}")) {
+            document.getElementById('delete-form').submit();
+        }
+    }
+
+    function removeImage() {
+        if (confirm("{{ t('admin.delete_image_confirm') }}")) {
+            document.getElementById('remove_image').value = 'yes';
+            document.querySelector('.image-preview').style.display = 'none';
+        }
+    }
+</script>
+{% endif %}
+
+<script>
+    function showTab(tabName) {
+        // Hide all tabs
+        document.querySelectorAll('.upload-tab-content').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        // Показываем выбранный таб
+        document.getElementById(tabName + '-tab').classList.add('active');
+        event.target.classList.add('active');
+    }
+
+    function previewImage(input) {
+        const preview = document.getElementById('new-image-preview');
+        const img = document.getElementById('preview-img');
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                img.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            preview.style.display = 'none';
+        }
+    }
+
+    let urlPreviewTimeout;
+    function previewUrlImage(input) {
+        const preview = document.getElementById('url-image-preview');
+        const img = document.getElementById('url-preview-img');
+
+        clearTimeout(urlPreviewTimeout);
+
+        if (input.value.trim()) {
+            urlPreviewTimeout = setTimeout(() => {
+                img.src = input.value;
+                img.onload = function () {
+                    preview.style.display = 'block';
+                };
+                img.onerror = function () {
+                    preview.style.display = 'none';
+                };
+            }, 500);
+        } else {
+            preview.style.display = 'none';
+        }
+    }
+</script>
+
+<style>
+    .image-upload-tabs {
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+    }
+
+    .upload-tab-buttons {
+        display: flex;
+        background: var(--bg-tertiary);
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .tab-btn {
+        flex: 1;
+        padding: 0.75rem 1rem;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        transition: all 0.2s;
+    }
+
+    .tab-btn:hover {
+        background: var(--bg-secondary);
+    }
+
+    .tab-btn.active {
+        background: var(--bg-primary);
+        color: var(--primary);
+        font-weight: 500;
+    }
+
+    .upload-tab-content {
+        display: none;
+        padding: 1rem;
+    }
+
+    .upload-tab-content.active {
+        display: block;
+    }
+
+    .upload-tab-content input[type="file"] {
+        padding: 0.75rem;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t('home.title') }}{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <h1>{{ t('common.welcome') }}</h1>
+        <p>{{ t('common.subtitle') }}</p>
+        <div class="hero-buttons">
+            <a href="{{ url_for('teachers.list_teachers') }}" class="btn btn-primary">
+                <i class="fas fa-chalkboard-teacher"></i> {{ t('nav.teachers') }}
+            </a>
+            <a href="{{ url_for('rooms.current_free_rooms') }}" class="btn btn-secondary">
+                <i class="fas fa-door-open"></i> {{ t('features.free_rooms.title') }}
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="features">
+    <div class="container">
+        <h2 class="section-title">{{ t('home.features_title') }}</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-star"></i></div>
+                <h3>{{ t('features.teachers_rating.title') }}</h3>
+                <p>{{ t('features.teachers_rating.description') }}</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-calendar-alt"></i></div>
+                <h3>{{ t('features.schedules.title') }}</h3>
+                <p>{{ t('features.schedules.description') }}</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-door-open"></i></div>
+                <h3>{{ t('features.free_rooms.title') }}</h3>
+                <p>{{ t('features.free_rooms.description') }}</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-newspaper"></i></div>
+                <h3>{{ t('features.news.title') }}</h3>
+                <p>{{ t('features.news.description') }}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if top_teachers %}
+<section class="section">
+    <div class="container">
+        <h2 class="section-title">
+            <i class="fas fa-trophy"></i> {{ t('home.top_teachers') }}
+        </h2>
+        <div class="teachers-grid">
+            {% for teacher in top_teachers[:5] %}
+            <a href="{{ url_for('teachers.teacher_detail', teacher_id=teacher.id) }}" class="teacher-card">
+                <div class="teacher-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="teacher-info">
+                    <h3>{{ teacher.full_name_en }}</h3>
+                    {% if teacher.level %}
+                    <p class="teacher-level">{{ teacher.level }}</p>
+                    {% endif %}
+                    <div class="teacher-rating">
+                        {% for i in range(5) %}
+                            {% if i < teacher.rating|int %}
+                            <i class="fas fa-star"></i>
+                            {% else %}
+                            <i class="far fa-star"></i>
+                            {% endif %}
+                        {% endfor %}
+                        <span>{{ "%.1f"|format(teacher.rating) }}</span>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{{ url_for('teachers.top_teachers') }}" class="btn btn-outline">
+                {{ t('common.view_all') }} <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% if latest_news %}
+<section class="section section-gray">
+    <div class="container">
+        <h2 class="section-title">
+            <i class="fas fa-newspaper"></i> {{ t('home.latest_news') }}
+        </h2>
+        <div class="news-grid">
+            {% for article in latest_news[:3] %}
+            <a href="{{ url_for('news.news_detail', news_id=article.id) }}" class="news-card">
+                {% if article.image %}
+                <div class="news-image">
+                    <img src="{{ article.image }}" alt="{{ article.title }}">
+                </div>
+                {% endif %}
+                <div class="news-content">
+                    <span class="news-category">{{ article.category }}</span>
+                    <h3>{{ article.title }}</h3>
+                    <p>{{ article.content[:150] }}...</p>
+                    <div class="news-meta">
+                        <span><i class="fas fa-user"></i> {{ article.author }}</span>
+                        <span><i class="fas fa-eye"></i> {{ article.views_count }} {{ t('common.views') }}</span>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{{ url_for('news.list_news') }}" class="btn btn-outline">
+                {{ t('common.all_news') }} <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% if products %}
+<section class="section">
+    <div class="container">
+        <h2 class="section-title">
+            <i class="fas fa-store"></i> {{ t('home.shop_title') }}
+        </h2>
+        <div class="products-grid">
+            {% for product in products[:4] %}
+            <div class="product-card">
+                {% if product.image %}
+                <div class="product-image">
+                    <img src="{{ product.image }}" alt="{{ product.name }}">
+                </div>
+                {% else %}
+                <div class="product-image product-placeholder">
+                    <i class="fas fa-image"></i>
+                </div>
+                {% endif %}
+                <div class="product-info">
+                    <h3>{{ product.name }}</h3>
+                    <p class="product-category">{{ product.category }}</p>
+                    <p class="product-description">{{ product.description[:60] }}{% if product.description|length > 60 %}...{% endif %}</p>
+                    <div class="product-footer">
+                        <span class="product-price">{{ "%.0f"|format(product.price) }} ₸</span>
+                        <span class="product-stock">
+                            {% if product.stock > 0 %}
+                            <i class="fas fa-check-circle"></i> {{ t('shop.in_stock') }}
+                            {% else %}
+                            <i class="fas fa-times-circle"></i> {{ t('shop.out_of_stock') }}
+                            {% endif %}
+                        </span>
+                    </div>
+                    {% if product.stock > 0 %}
+                    <form action="{{ url_for('shop.add_to_cart', product_id=product.id) }}" method="POST" class="add-to-cart-form">
+                        <input type="hidden" name="quantity" value="1">
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <i class="fas fa-cart-plus"></i> {{ t('common.add_to_cart') }}
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{{ url_for('shop.list_products') }}" class="btn btn-outline">
+                {{ t('common.all_products') }} <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}
+

@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t('shop.checkout_title') }} - SDU SuperApp{% endblock %}
+
+{% block content %}
+<div class="container">
+    <a href="{{ url_for('shop.cart') }}" class="back-link">
+        <i class="fas fa-arrow-left"></i> {{ t('shop.back_to_cart') }}
+    </a>
+
+    <div class="page-header">
+        <h1><i class="fas fa-credit-card"></i> {{ t('shop.checkout_title') }}</h1>
+    </div>
+
+    <div class="checkout-layout">
+        <div class="checkout-form-section">
+            <form action="{{ url_for('shop.checkout') }}" method="POST" class="checkout-form"
+                lang="{{ current_language }}">
+                <div class="form-card">
+                    <h3><i class="fas fa-user"></i> {{ t('shop.contact_info') }}</h3>
+                    <div class="form-group">
+                        <label for="name">{{ t('shop.name') }} *</label>
+                        <input type="text" id="name" name="name" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">{{ t('shop.email_label') }} *</label>
+                        <input type="email" id="email" name="email" class="form-input" required>
+                    </div>
+                </div>
+
+                <div class="form-card">
+                    <h3><i class="fas fa-map-marker-alt"></i> {{ t('shop.delivery') }}</h3>
+                    <div class="form-group">
+                        <label for="address">{{ t('shop.delivery_address') }} *</label>
+                        <textarea id="address" name="address" class="form-input" rows="3"
+                            placeholder="{{ t('shop.pickup_placeholder') }}" required></textarea>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg btn-block">
+                    <i class="fas fa-check"></i> {{ t('shop.confirm_order') }}
+                </button>
+            </form>
+        </div>
+
+        <div class="checkout-summary">
+            <div class="summary-card">
+                <h3>{{ t('shop.your_order') }}</h3>
+                <div class="order-items">
+                    {% for item in items %}
+                    <div class="order-item">
+                        <span class="item-name">{{ item.product.name }}</span>
+                        <span class="item-qty">× {{ item.quantity }}</span>
+                        <span class="item-price">{{ "%.0f"|format(item.subtotal) }} ₸</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="summary-divider"></div>
+                <div class="summary-row summary-total">
+                    <span>{{ t('shop.total') }}:</span>
+                    <span>{{ "%.0f"|format(total) }} ₸</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelector('.checkout-form').addEventListener('submit', function (e) {
+        const form = this;
+        const lang = '{{ current_language }}';
+
+        const messages = {
+            'ru': {
+                'name': 'Пожалуйста, заполните поле \"Имя\"',
+                'email': 'Пожалуйста, заполните поле \"Email\"',
+                'address': 'Пожалуйста, заполните поле \"Адрес доставки\"'
+            },
+            'en': {
+                'name': 'Please fill in the \"Name\" field',
+                'email': 'Please fill in the \"Email\" field',
+                'address': 'Please fill in the \"Delivery address\" field'
+            },
+            'kz': {
+                'name': 'Өтінеміз, \"Аты\" өрісін толтырыңыз',
+                'email': 'Өтінеміз, \"Email\" өрісін толтырыңыз',
+                'address': 'Өтінеміз, \"Жеткізу мекенжайы\" өрісін толтырыңыз'
+            }
+        };
+
+        const langMessages = messages[lang] || messages['ru'];
+
+        const nameField = form.querySelector('#name');
+        const emailField = form.querySelector('#email');
+        const addressField = form.querySelector('#address');
+
+        let isValid = true;
+
+        if (!nameField.value.trim()) {
+            nameField.setCustomValidity(langMessages['name']);
+            isValid = false;
+        } else {
+            nameField.setCustomValidity('');
+        }
+
+        if (!emailField.value.trim()) {
+            emailField.setCustomValidity(langMessages['email']);
+            isValid = false;
+        } else {
+            emailField.setCustomValidity('');
+        }
+
+        if (!addressField.value.trim()) {
+            addressField.setCustomValidity(langMessages['address']);
+            isValid = false;
+        } else {
+            addressField.setCustomValidity('');
+        }
+
+        if (!isValid) {
+            e.preventDefault();
+            if (!nameField.value.trim()) {
+                nameField.reportValidity();
+            } else if (!emailField.value.trim()) {
+                emailField.reportValidity();
+            } else if (!addressField.value.trim()) {
+                addressField.reportValidity();
+            }
+        }
+    });
+
+    document.querySelectorAll('.checkout-form input, .checkout-form textarea').forEach(function (field) {
+        field.addEventListener('input', function () {
+            this.setCustomValidity('');
+        });
+    });
+</script>
+{% endblock %}

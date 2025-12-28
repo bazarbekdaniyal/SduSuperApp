@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t('shop.my_orders') }} - SDU SuperApp{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1><i class="fas fa-shopping-bag"></i> {{ t('shop.my_orders') }}</h1>
+        <p>{{ t('shop.orders_for') }} {{ email }}</p>
+    </div>
+
+    {% if orders %}
+    <div class="orders-list">
+        {% for order in orders %}
+        <div class="section-card">
+            <div class="order-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <div>
+                    <h3>{{ t('shop.order') }} #{{ order.id[:8] }}</h3>
+                    <span class="review-date">{{ order.created_at[:10] }}</span>
+                </div>
+                <span class="status-badge status-{{ order.status|lower }}">{{ order.status }}</span>
+            </div>
+
+            <div class="order-items">
+                {% for item in order.items %}
+                <div class="order-item">
+                    <span class="item-name">{{ item.name }}</span>
+                    <span class="item-qty">× {{ item.quantity }}</span>
+                    <span class="item-price">{{ "%.0f"|format(item.price * item.quantity) }} ₸</span>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="summary-divider"></div>
+
+            <div class="summary-row summary-total">
+                <span>{{ t('shop.total') }}:</span>
+                <span>{{ "%.0f"|format(order.total_amount) }} ₸</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-shopping-bag"></i>
+        <h3>{{ t('shop.no_orders') }}</h3>
+        <a href="{{ url_for('shop.list_products') }}" class="btn btn-primary">
+            <i class="fas fa-store"></i> {{ t('shop.go_to_shop_from_orders') }}
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

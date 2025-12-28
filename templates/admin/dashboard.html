@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t('admin.panel_title') }} - SDU SuperApp{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1><i class="fas fa-cog"></i> {{ t('admin.panel_title') }}</h1>
+    </div>
+
+    <!-- Admin Navigation -->
+    <nav class="admin-nav">
+        <a href="{{ url_for('admin.dashboard') }}" class="admin-nav-link active">
+            <i class="fas fa-tachometer-alt"></i> {{ t('admin.dashboard') }}
+        </a>
+        <a href="{{ url_for('admin.reviews') }}" class="admin-nav-link">
+            <i class="fas fa-comments"></i> {{ t('admin.reviews') }}
+            {% if pending_reviews %}<span class="badge">{{ pending_reviews|length }}</span>{% endif %}
+        </a>
+        <a href="{{ url_for('admin.teachers') }}" class="admin-nav-link">
+            <i class="fas fa-chalkboard-teacher"></i> {{ t('admin.teachers') }}
+        </a>
+        <a href="{{ url_for('admin.news') }}" class="admin-nav-link">
+            <i class="fas fa-newspaper"></i> {{ t('admin.news') }}
+        </a>
+        <a href="{{ url_for('admin.subscribers') }}" class="admin-nav-link">
+            <i class="fas fa-users"></i> {{ t('admin.subscribers') }}
+        </a>
+        <a href="{{ url_for('admin.orders') }}" class="admin-nav-link">
+            <i class="fas fa-shopping-bag"></i> {{ t('admin.orders') }}
+        </a>
+        <a href="{{ url_for('admin.products') }}" class="admin-nav-link">
+            <i class="fas fa-box"></i> {{ t('admin.products') }}
+        </a>
+        <a href="{{ url_for('admin.logout') }}" class="admin-nav-link logout-btn">
+            <i class="fas fa-sign-out-alt"></i> {{ t('admin.logout') }}
+        </a>
+    </nav>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+            <div>
+                <span class="stat-value">{{ stats.teachers_count }}</span>
+                <span class="stat-label">{{ t('admin.teachers') }}</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-star"></i></div>
+            <div>
+                <span class="stat-value">{{ stats.reviews_stats.total }}</span>
+                <span class="stat-label">{{ t('admin.total_reviews') }}</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-clock"></i></div>
+            <div>
+                <span class="stat-value">{{ stats.reviews_stats.pending }}</span>
+                <span class="stat-label">{{ t('admin.pending') }}</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-envelope"></i></div>
+            <div>
+                <span class="stat-value">{{ stats.subscribers_count }}</span>
+                <span class="stat-label">{{ t('admin.subscribers') }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sections -->
+    <div class="admin-sections">
+        <!-- Pending Reviews -->
+        <div class="admin-section">
+            <div class="section-header">
+                <h2><i class="fas fa-comments"></i> {{ t('admin.pending_reviews') }}</h2>
+                <a href="{{ url_for('admin.reviews') }}" class="btn btn-sm btn-outline">{{ t('admin.all_reviews') }}</a>
+            </div>
+
+            {% if pending_reviews %}
+            <div class="pending-list">
+                {% for review in pending_reviews %}
+                <div class="pending-item">
+                    <div class="pending-info">
+                        <strong>{{ review.author_name }}</strong>
+                        <div class="review-rating-small">
+                            {% for i in range(5) %}
+                            {% if i < review.rating %} <i class="fas fa-star"></i>
+                                {% else %}
+                                <i class="far fa-star"></i>
+                                {% endif %}
+                                {% endfor %}
+                        </div>
+                        <p>{{ review.comment[:50] }}{% if review.comment|length > 50 %}...{% endif %}</p>
+                        <small class="teacher-name">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            {% if teachers.get(review.teacher_id) %}
+                            <a href="{{ url_for('teachers.teacher_detail', teacher_id=review.teacher_id) }}"
+                                target="_blank">
+                                {{ teachers[review.teacher_id].full_name_en }}
+                            </a>
+                            {% else %}
+                            {{ t('admin.teacher_not_found') }}
+                            {% endif %}
+                        </small>
+                    </div>
+                    <div class="pending-actions">
+                        <form action="{{ url_for('admin.approve_review', review_id=review.id) }}" method="POST"
+                            style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-success"><i class="fas fa-check"></i></button>
+                        </form>
+                        <form action="{{ url_for('admin.delete_review', review_id=review.id) }}" method="POST"
+                            style="display:inline;" onsubmit="return confirm('{{ t('admin.delete_confirm') }}');">
+                            <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="empty-text">{{ t('admin.no_pending_reviews') }}</p>
+            {% endif %}
+        </div>
+
+        <!-- Recent Orders -->
+        <div class="admin-section">
+            <div class="section-header">
+                <h2><i class="fas fa-shopping-bag"></i> {{ t('admin.pending_orders') }}</h2>
+                <a href="{{ url_for('admin.orders') }}" class="btn btn-sm btn-outline">{{ t('admin.all_orders') }}</a>
+            </div>
+
+            {% if pending_orders %}
+            <div class="pending-list">
+                {% for order in pending_orders %}
+                <div class="pending-item">
+                    <div class="pending-info">
+                        <strong>Order #{{ order.id[:8] }}</strong> <span class="text-muted"
+                            style="font-size: 0.8em; margin-left: 5px;">{{ order.created_at[:10] }} {{
+                            order.created_at[11:16] }}</span>
+                        <p>{{ order.customer_name }} - {{ "%.0f"|format(order.total_amount) }} ₸</p>
+                        {% if order.delivery_address %}
+                        <p class="delivery-address" title="{{ order.delivery_address }}">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>{{ order.delivery_address }}</span>
+                        </p>
+                        {% endif %}
+                    </div>
+                    <div class="pending-actions">
+                        <form action="{{ url_for('admin.confirm_order', order_id=order.id) }}" method="POST"
+                            style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-success"><i class="fas fa-check"></i>
+                                {{ t('admin.confirm') }}</button>
+                        </form>
+                        <form action="{{ url_for('admin.cancel_order', order_id=order.id) }}" method="POST"
+                            style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-danger"
+                                onclick="return confirm('{{ t('admin.cancel_confirm') }}')"><i class="fas fa-times"></i>
+                                {{ t('admin.cancel') }}</button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="empty-text">{{ t('admin.no_pending_orders') }}</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

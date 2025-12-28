@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t('rooms.search_title') }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1><i class="fas fa-door-open"></i> {{ t('rooms.page_title') }}</h1>
+        <p>{{ t('rooms.page_subtitle') }}</p>
+    </div>
+
+    <div class="rooms-nav">
+        <a href="{{ url_for('rooms.search_cabinets') }}" class="rooms-nav-btn active">
+            <i class="fas fa-search"></i> {{ t('rooms.search_heading') }}
+        </a>
+        <a href="{{ url_for('rooms.list_rooms') }}" class="rooms-nav-btn">
+            <i class="fas fa-calendar-alt"></i> {{ t('rooms.by_time') }}
+        </a>
+        <a href="{{ url_for('rooms.current_free_rooms') }}" class="rooms-nav-btn">
+            <i class="fas fa-clock"></i> {{ t('rooms.free_now') }}
+        </a>
+        <a href="{{ url_for('rooms.next_slot_free_rooms') }}" class="rooms-nav-btn">
+            <i class="fas fa-forward"></i> {{ t('rooms.next_lesson') }}
+        </a>
+    </div>
+
+    <div class="filters-card">
+        <form action="{{ url_for('rooms.search_cabinets') }}" method="GET" class="search-form">
+            <div class="search-input-group search-input-large">
+                <input type="text" name="q" placeholder="{{ t('rooms.search_placeholder') }}" value="{{ query }}"
+                    class="form-input" autofocus>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i> {{ t('rooms.search_button') }}
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="buildings-section-inline">
+        <h4><i class="fas fa-building"></i> {{ t('rooms.buildings') }}</h4>
+        <div class="filter-buttons">
+            <a href="{{ url_for('rooms.search_cabinets', q='Main building') }}"
+                class="filter-btn {% if query == 'Main building' %}active{% endif %}">Main building</a>
+            <a href="{{ url_for('rooms.search_cabinets', q='Economics block') }}"
+                class="filter-btn {% if query == 'Economics block' %}active{% endif %}">Main building - Economics
+                block</a>
+            <a href="{{ url_for('rooms.search_cabinets', q='Engineering block') }}"
+                class="filter-btn {% if query == 'Engineering block' %}active{% endif %}">Main building - Engineering
+                block</a>
+            <a href="{{ url_for('rooms.search_cabinets', q='Law block') }}"
+                class="filter-btn {% if query == 'Law block' %}active{% endif %}">Main building - Law block</a>
+            <a href="{{ url_for('rooms.search_cabinets', q='Philology block') }}"
+                class="filter-btn {% if query == 'Philology block' %}active{% endif %}">Main building - Philology
+                block</a>
+        </div>
+    </div>
+
+    {% if query %}
+    <div class="results-header">
+        <h2>
+            {% if cabinets %}
+            <i class="fas fa-check-circle"></i> {{ t('rooms.found_total', count=cabinets|length) }}
+            {% else %}
+            <i class="fas fa-times-circle"></i> {{ t('rooms.not_found') }}
+            {% endif %}
+        </h2>
+        <p>{{ t('rooms.for_query') }}: "{{ query }}"</p>
+    </div>
+    {% endif %}
+
+    {% if cabinets %}
+    <div class="rooms-grid">
+        {% for cabinet in cabinets %}
+        <a href="{{ url_for('rooms.cabinet_schedule', cabinet_id=cabinet.id) }}" class="room-card room-card-link">
+            <div class="room-header">
+                <span class="room-number">{{ cabinet.name }}</span>
+                <i class="fas fa-calendar-alt room-schedule-icon"></i>
+            </div>
+            <div class="room-info">
+                <p><i class="fas fa-building"></i> {{ cabinet.parent_building_en }}</p>
+                <p class="room-hint"><i class="fas fa-eye"></i> {{ t('rooms.show_schedule') }}</p>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% elif query %}
+    <div class="empty-state">
+        <i class="fas fa-search"></i>
+        <h3>{{ t('rooms.not_found') }}</h3>
+        <p>{{ t('rooms.try_again') }}</p>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-door-open"></i>
+        <h3>{{ t('rooms.enter_name') }}</h3>
+        <p>{{ t('rooms.example') }}</p>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    .rooms-nav {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-bottom: 2rem;
+    }
+
+    .rooms-nav-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.25rem;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        border: 2px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        text-decoration: none !important;
+        font-weight: 500;
+    }
+
+    .rooms-nav-btn:hover,
+    .rooms-nav-btn:focus,
+    .rooms-nav-btn:active {
+        border-color: var(--primary);
+        color: var(--primary);
+        text-decoration: none !important;
+        outline: none;
+    }
+
+    .rooms-nav-btn.active {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+    }
+
+    .search-input-large {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .search-input-large .form-input {
+        font-size: 1.1rem;
+        padding: 1rem 1.25rem;
+    }
+
+    .room-card-link {
+        text-decoration: none;
+        color: inherit;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .room-card-link:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .room-card-link:hover .room-schedule-icon {
+        color: var(--primary);
+    }
+
+    .room-schedule-icon {
+        font-size: 1.2rem;
+        color: var(--text-muted);
+        transition: color 0.3s;
+    }
+
+    .room-hint {
+        font-size: 0.8rem;
+        color: var(--primary);
+        margin-top: 0.5rem;
+    }
+
+    .buildings-section-inline {
+        margin-top: 1.5rem;
+        text-align: center;
+    }
+
+    .buildings-section-inline h4 {
+        margin-bottom: 1rem;
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+        font-weight: 500;
+    }
+
+    .buildings-section-inline .filter-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .buildings-section-inline .filter-btn {
+        font-size: 0.85rem;
+        padding: 0.5rem 1rem;
+    }
+
+    @media (max-width: 600px) {
+        .rooms-nav {
+            flex-direction: column;
+        }
+
+        .rooms-nav-btn {
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t('news.title') }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1><i class="fas fa-newspaper"></i> {{ t('news.page_title') }}</h1>
+        <p>{{ t('news.page_subtitle') }}</p>
+    </div>
+
+    <div class="news-layout">
+        <div class="news-main">
+            <div class="filters-section">
+                <form action="{{ url_for('news.list_news') }}" method="GET" class="search-form">
+                    <div class="search-input-group">
+                        <input type="text" name="search" placeholder="{{ t('news.search_placeholder') }}"
+                               value="{{ search_query or '' }}" class="form-input">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+
+                <div class="filter-buttons">
+                    <a href="{{ url_for('news.list_news') }}"
+                       class="filter-btn {% if not current_category %}active{% endif %}">
+                        {{ t('news.all') }}
+                    </a>
+                    {% for cat in categories %}
+                    <a href="{{ url_for('news.list_news', category=cat) }}"
+                       class="filter-btn {% if current_category == cat %}active{% endif %}">
+                        {{ cat }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+
+            {% if news %}
+            <div class="news-list">
+                {% for article in news %}
+                <a href="{{ url_for('news.news_detail', news_id=article.id) }}" class="news-card-horizontal">
+                    {% if article.image %}
+                    <div class="news-image">
+                        <img src="{{ article.image }}" alt="{{ article.title }}">
+                    </div>
+                    {% endif %}
+                    <div class="news-content">
+                        <span class="news-category">{{ article.category }}</span>
+                        <h3>{{ article.title }}</h3>
+                        <p>{{ article.content[:200] }}...</p>
+                        <div class="news-meta">
+                            <span><i class="fas fa-user"></i> {{ article.author }}</span>
+                            <span><i class="fas fa-calendar"></i> {{ article.created_at[:10] }}</span>
+                            <span><i class="fas fa-eye"></i> {{ article.views_count }}</span>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-newspaper"></i>
+                <h3>{{ t('news.not_found') }}</h3>
+            </div>
+            {% endif %}
+        </div>
+
+        <aside class="news-sidebar">
+            <div class="sidebar-card">
+                <h3><i class="fas fa-fire"></i> {{ t('news.popular') }}</h3>
+                <ul class="popular-list">
+                    {% for article in popular_news %}
+                    <li>
+                        <a href="{{ url_for('news.news_detail', news_id=article.id) }}">
+                            {{ article.title }}
+                            <span class="views"><i class="fas fa-eye"></i> {{ article.views_count }}</span>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="sidebar-card">
+                <h3><i class="fas fa-envelope"></i> {{ t('news.subscribe_title') }}</h3>
+                <p>{{ t('news.subscribe_text') }}</p>
+                <form action="{{ url_for('news.subscribe') }}" method="POST">
+                    <input type="text" name="name" placeholder="{{ t('news.name_placeholder') }}" class="form-input" required>
+                    <input type="email" name="email" placeholder="{{ t('news.email_placeholder') }}" class="form-input" required>
+                    <button type="submit" class="btn btn-primary btn-block">
+                        {{ t('news.subscribe_button') }}
+                    </button>
+                </form>
+            </div>
+        </aside>
+    </div>
+</div>
+{% endblock %}
+

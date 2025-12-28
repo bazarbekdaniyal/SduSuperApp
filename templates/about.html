@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t('about.page_title') }} - SDU SuperApp{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1><i class="fas fa-info-circle"></i> {{ t('about.page_heading') }}</h1>
+    </div>
+
+    <div class="section-card">
+        <h2>{{ t('about.description_title') }}</h2>
+        <p>{{ t('about.description_text') }}</p>
+
+        <h3 style="margin-top: 2rem;">{{ t('about.features_title') }}</h3>
+        <ul style="list-style: disc; padding-left: 2rem; margin-top: 1rem;">
+            <li>{{ t('about.feature_teachers') }}</li>
+            <li>{{ t('about.feature_schedules') }}</li>
+            <li>{{ t('about.feature_rooms') }}</li>
+            <li>{{ t('about.feature_news') }}</li>
+            <li>{{ t('about.feature_shop') }}</li>
+        </ul>
+    </div>
+
+    <div class="section-card">
+        <h2><i class="fas fa-cogs"></i> {{ t('about.tech_title') }}</h2>
+        <ul style="list-style: disc; padding-left: 2rem;">
+            <li>Python 3.11 + Flask</li>
+            <li>HTML5, CSS3, Jinja2</li>
+            <li>{{ t('about.tech_json') }}</li>
+        </ul>
+    </div>
+
+    <div class="section-card">
+        <h2><i class="fas fa-puzzle-piece"></i> {{ t('about.patterns_title') }}</h2>
+        <div
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
+            <div class="feature-card">
+                <h4>Factory Method</h4>
+                <p><strong>Creational Pattern</strong></p>
+                <p>{{ t('about.pattern_factory') }}</p>
+            </div>
+            <div class="feature-card">
+                <h4>Observer</h4>
+                <p><strong>Behavioral Pattern</strong></p>
+                <p>{{ t('about.pattern_observer') }}</p>
+            </div>
+            <div class="feature-card">
+                <h4>Facade</h4>
+                <p><strong>Structural Pattern</strong></p>
+                <p>{{ t('about.pattern_facade') }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-card">
+        <h2><i class="fas fa-users"></i> {{ t('about.team_title') }}</h2>
+        <ul style="list-style: none; padding: 0; margin: 1rem 0;">
+            <li style="padding: 0.5rem 0;"><strong>Daniyal Bazarbek</strong></li>
+            <li style="padding: 0.5rem 0;"><strong>Yerkezhan Chakenova</strong></li>
+            <li style="padding: 0.5rem 0;"><strong>Kenshibek Assylkhan</strong></li>
+        </ul>
+        <p style="margin-top: 1.5rem;">{{ t('about.course') }}</p>
+        <p>{{ t('about.project_info') }}</p>
+    </div>
+</div>
+{% endblock %}

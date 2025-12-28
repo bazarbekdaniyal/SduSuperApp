@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t('admin.edit_subscriber') }} - SDU SuperApp{% endblock %}
+
+{% block content %}
+<div class="container">
+    <a href="{{ url_for('admin.subscribers') }}" class="back-link">
+        <i class="fas fa-arrow-left"></i> {{ t('admin.back_list') }}
+    </a>
+
+    <div class="page-header">
+        <h1><i class="fas fa-user-edit"></i> {{ t('admin.edit_subscriber') }}</h1>
+    </div>
+
+    <div class="form-card-page">
+        <form action="{{ url_for('admin.edit_subscriber', subscriber_id=subscriber.id) }}" method="POST"
+            class="admin-form">
+            <div class="form-group">
+                <label for="name">{{ t('admin.full_name') }} *</label>
+                <input type="text" id="name" name="name" class="form-input" value="{{ subscriber.name }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" id="email" name="email" class="form-input" value="{{ subscriber.email }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="is_active">{{ t('admin.status') }}</label>
+                <select id="is_active" name="is_active" class="form-select">
+                    <option value="yes" {% if subscriber.is_active %}selected{% endif %}>{{ t('admin.active') }}
+                    </option>
+                    <option value="no" {% if not subscriber.is_active %}selected{% endif %}>{{ t('admin.inactive') }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="language">{{ t('admin.language') }}</label>
+                <select id="language" name="language" class="form-select">
+                    <option value="ru" {% if subscriber.language=='ru' %}selected{% endif %}>Russian</option>
+                    <option value="en" {% if subscriber.language=='en' %}selected{% endif %}>English</option>
+                    <option value="kz" {% if subscriber.language=='kz' %}selected{% endif %}>Kazakh</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>{{ t('admin.subscription_categories') }}</label>
+                <div class="checkbox-list">
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="categories" id="cat_all" value="all" {% if 'all' in
+                            subscriber.categories %}checked{% endif %}>
+                        <label for="cat_all">{{ t('admin.all_news') }}</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="categories" id="cat_announcement" value="Announcement" {%
+                            if 'Announcement' in subscriber.categories %}checked{% endif %}>
+                        <label for="cat_announcement">{{ t('admin.announcements') }}</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="categories" id="cat_event" value="Event" {% if 'Event' in
+                            subscriber.categories %}checked{% endif %}>
+                        <label for="cat_event">{{ t('admin.events') }}</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="categories" id="cat_academic" value="Academic" {% if 'Academic' in
+                            subscriber.categories %}checked{% endif %}>
+                        <label for="cat_academic">{{ t('admin.academic') }}</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="categories" id="cat_sports" value="Sports" {% if 'Sports' in
+                            subscriber.categories %}checked{% endif %}>
+                        <label for="cat_sports">{{ t('admin.sports') }}</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>{{ t('admin.subscribed_at') }}</label>
+                <p class="form-static">{{ subscriber.subscribed_at[:10] if subscriber.subscribed_at else
+                    t('admin.unknown') }}
+                </p>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="fas fa-save"></i> {{ t('admin.save') }}
+                </button>
+                <a href="{{ url_for('admin.subscribers') }}" class="btn btn-outline btn-lg">{{ t('admin.cancel') }}</a>
+                <form action="{{ url_for('admin.delete_subscriber', subscriber_id=subscriber.id) }}" method="POST"
+                    style="display:inline;">
+                    <button type="submit" class="btn btn-danger btn-lg"
+                        onclick="return confirm('{{ t('admin.delete_subscriber_confirm') }}');">
+                        <i class="fas fa-trash"></i> {{ t('admin.delete') }}
+                    </button>
+                </form>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .checkbox-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .checkbox-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .checkbox-item input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+    }
+
+    .checkbox-item label {
+        margin: 0;
+        cursor: pointer;
+    }
+
+    .form-static {
+        color: var(--text-secondary);
+        padding: 0.5rem 0;
+    }
+</style>
+{% endblock %}

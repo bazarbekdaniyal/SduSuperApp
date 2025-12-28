@@ -1,0 +1,592 @@
+[
+  {
+    "id": 55,
+    "name": "D101",
+    "parent_building_en": "Main building - Law block"
+  },
+  {
+    "id": 56,
+    "name": "D102",
+    "parent_building_en": "Main building - Law block"
+  },
+  {
+    "id": 57,
+    "name": "D103",
+    "parent_building_en": "Main building - Law block"
+  },
+  {
+    "id": 58,
+    "name": "D104",
+    "parent_building_en": "Main building - Law block"
+  },
+  {
+    "id": 59,
+    "name": "D108",
+    "parent_building_en": "Main building - Law block"
+  },
+  {
+    "id": 68,
+    "name": "D113",
+    "parent_building_en": "Main building"
+  },
+  {
+    "id": 69,
+    "name": "D116",
+    "parent_building_en": "Main building"
+  },
+  {
+    "id": 70,
+    "name": "D117",
+    "parent_building_en": "Main building"
+  },
+  {
+    "id": 60,
+    "name": "D201",
+    "parent_building_en": "Main building - Law block"
+  },
+  {
+    "id": 61,
+    "name": "D202",
+    "parent_building_en": "Main building - Law block"
+  },
+  {
+    "id": 62,
+    "name": "D203",
+    "parent_building_en": "Main building - Law block"
+  },
+  {
+    "id": 63,
+    "name": "D204",
+    "parent_building_en": "Main building - Law block"
+  },
+  {
+    "id": 64,
+    "name": "D205",
+    "parent_building_en": "Main building - Law block"
+  },
+  {
+    "id": 65,
+    "name": "D209",
+    "parent_building_en": "Main building - Law block"
+  },
+  {
+    "id": 71,
+    "name": "D214",
+    "parent_building_en": "Main building"
+  },
+  {
+    "id": 72,
+    "name": "D217",
+    "parent_building_en": "Main building"
+  },
+  {
+    "id": 73,
+    "name": "D218",
+    "parent_building_en": "Main building"
+  },
+  {
+    "id": 66,
+    "name": "D301",
+    "parent_building_en": "Main building - Law block"
+  },
+  {
+    "id": 97,
+    "name": "D302",
+    "parent_building_en": "Main building - Philology block"
+  },
+  {
+    "id": 98,
+    "name": "D303",
+    "parent_building_en": "Main building - Philology block"
+  },
+  {
+    "id": 99,
+    "name": "D304",
+    "parent_building_en": "Main building - Philology block"
+  },
+  {
+    "id": 16,
+    "name": "D305",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 100,
+    "name": "E101",
+    "parent_building_en": "Main building - Philology block"
+  },
+  {
+    "id": 101,
+    "name": "E102",
+    "parent_building_en": "Main building - Philology block"
+  },
+  {
+    "id": 102,
+    "name": "E103",
+    "parent_building_en": "Main building - Philology block"
+  },
+  {
+    "id": 103,
+    "name": "E104",
+    "parent_building_en": "Main building - Philology block"
+  },
+  {
+    "id": 104,
+    "name": "E105",
+    "parent_building_en": "Main building - Philology block"
+  },
+  {
+    "id": 105,
+    "name": "E107",
+    "parent_building_en": "Main building - Philology block"
+  },
+  {
+    "id": 106,
+    "name": "E108",
+    "parent_building_en": "Main building - Philology block"
+  },
+  {
+    "id": 74,
+    "name": "E117",
+    "parent_building_en": "Main building"
+  },
+  {
+    "id": 107,
+    "name": "E201",
+    "parent_building_en": "Main building - Philology block"
+  },
+  {
+    "id": 108,
+    "name": "E202",
+    "parent_building_en": "Main building - Philology block"
+  },
+  {
+    "id": 109,
+    "name": "E203",
+    "parent_building_en": "Main building - Philology block"
+  },
+  {
+    "id": 110,
+    "name": "E204",
+    "parent_building_en": "Main building - Philology block"
+  },
+  {
+    "id": 111,
+    "name": "E205",
+    "parent_building_en": "Main building - Philology block"
+  },
+  {
+    "id": 75,
+    "name": "E221",
+    "parent_building_en": "Main building"
+  },
+  {
+    "id": 112,
+    "name": "E301",
+    "parent_building_en": "Main building - Philology block"
+  },
+  {
+    "id": 113,
+    "name": "E302",
+    "parent_building_en": "Main building - Philology block"
+  },
+  {
+    "id": 114,
+    "name": "E303",
+    "parent_building_en": "Main building - Philology block"
+  },
+  {
+    "id": 115,
+    "name": "E304",
+    "parent_building_en": "Main building - Philology block"
+  },
+  {
+    "id": 116,
+    "name": "E305",
+    "parent_building_en": "Main building - Philology block"
+  },
+  {
+    "id": 17,
+    "name": "F101",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 18,
+    "name": "F102",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 19,
+    "name": "F103",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 20,
+    "name": "F104",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 21,
+    "name": "F107",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 22,
+    "name": "F108",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 23,
+    "name": "F201",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 24,
+    "name": "F202",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 25,
+    "name": "F203",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 26,
+    "name": "F204",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 27,
+    "name": "F205",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 28,
+    "name": "F301",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 29,
+    "name": "F302",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 30,
+    "name": "F303",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 31,
+    "name": "F304",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 32,
+    "name": "F305",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 33,
+    "name": "G101",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 34,
+    "name": "G102",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 35,
+    "name": "G103",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 36,
+    "name": "G104",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 1,
+    "name": "G105",
+    "parent_building_en": "Main building - Economics block"
+  },
+  {
+    "id": 37,
+    "name": "G107",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 2,
+    "name": "G108",
+    "parent_building_en": "Main building - Economics block"
+  },
+  {
+    "id": 3,
+    "name": "G112",
+    "parent_building_en": "Main building - Economics block"
+  },
+  {
+    "id": 4,
+    "name": "G113",
+    "parent_building_en": "Main building - Economics block"
+  },
+  {
+    "id": 117,
+    "name": "G114",
+    "parent_building_en": "Main building - Philology block"
+  },
+  {
+    "id": 118,
+    "name": "G115",
+    "parent_building_en": "Main building - Philology block"
+  },
+  {
+    "id": 5,
+    "name": "G201",
+    "parent_building_en": "Main building - Economics block"
+  },
+  {
+    "id": 6,
+    "name": "G202",
+    "parent_building_en": "Main building - Economics block"
+  },
+  {
+    "id": 7,
+    "name": "G203",
+    "parent_building_en": "Main building - Economics block"
+  },
+  {
+    "id": 8,
+    "name": "G204",
+    "parent_building_en": "Main building - Economics block"
+  },
+  {
+    "id": 9,
+    "name": "G205",
+    "parent_building_en": "Main building - Economics block"
+  },
+  {
+    "id": 10,
+    "name": "G215",
+    "parent_building_en": "Main building - Economics block"
+  },
+  {
+    "id": 11,
+    "name": "G216",
+    "parent_building_en": "Main building - Economics block"
+  },
+  {
+    "id": 76,
+    "name": "G218",
+    "parent_building_en": "Main building"
+  },
+  {
+    "id": 67,
+    "name": "G219",
+    "parent_building_en": "Main building"
+  },
+  {
+    "id": 12,
+    "name": "G301",
+    "parent_building_en": "Main building - Economics block"
+  },
+  {
+    "id": 13,
+    "name": "G302",
+    "parent_building_en": "Main building - Economics block"
+  },
+  {
+    "id": 14,
+    "name": "G303",
+    "parent_building_en": "Main building - Economics block"
+  },
+  {
+    "id": 15,
+    "name": "G304",
+    "parent_building_en": "Main building - Economics block"
+  },
+  {
+    "id": 38,
+    "name": "G305",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 77,
+    "name": "H 01",
+    "parent_building_en": "Main building"
+  },
+  {
+    "id": 78,
+    "name": "H 02",
+    "parent_building_en": "Main building"
+  },
+  {
+    "id": 79,
+    "name": "H 03",
+    "parent_building_en": "Main building"
+  },
+  {
+    "id": 80,
+    "name": "H 101",
+    "parent_building_en": "Main building"
+  },
+  {
+    "id": 81,
+    "name": "H 102",
+    "parent_building_en": "Main building"
+  },
+  {
+    "id": 82,
+    "name": "H 103",
+    "parent_building_en": "Main building"
+  },
+  {
+    "id": 83,
+    "name": "H 105",
+    "parent_building_en": "Main building"
+  },
+  {
+    "id": 84,
+    "name": "H 106",
+    "parent_building_en": "Main building"
+  },
+  {
+    "id": 85,
+    "name": "H 109",
+    "parent_building_en": "Main building"
+  },
+  {
+    "id": 86,
+    "name": "H 110",
+    "parent_building_en": "Main building"
+  },
+  {
+    "id": 87,
+    "name": "H 111",
+    "parent_building_en": "Main building"
+  },
+  {
+    "id": 88,
+    "name": "H 201",
+    "parent_building_en": "Main building"
+  },
+  {
+    "id": 89,
+    "name": "H 202",
+    "parent_building_en": "Main building"
+  },
+  {
+    "id": 90,
+    "name": "H 203",
+    "parent_building_en": "Main building"
+  },
+  {
+    "id": 91,
+    "name": "H 212",
+    "parent_building_en": "Main building"
+  },
+  {
+    "id": 92,
+    "name": "H 213",
+    "parent_building_en": "Main building"
+  },
+  {
+    "id": 93,
+    "name": "H 214",
+    "parent_building_en": "Main building"
+  },
+  {
+    "id": 94,
+    "name": "H 301",
+    "parent_building_en": "Main building"
+  },
+  {
+    "id": 95,
+    "name": "H 302",
+    "parent_building_en": "Main building"
+  },
+  {
+    "id": 96,
+    "name": "H 303",
+    "parent_building_en": "Main building"
+  },
+  {
+    "id": 39,
+    "name": "I 101",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 40,
+    "name": "I 102",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 41,
+    "name": "I 103",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 42,
+    "name": "I 110, I 111",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 43,
+    "name": "I 201",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 44,
+    "name": "I 202",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 45,
+    "name": "I 203",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 46,
+    "name": "I 210",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 47,
+    "name": "I 211, I 212",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 48,
+    "name": "I 213",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 49,
+    "name": "I 301",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 50,
+    "name": "I 302",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 51,
+    "name": "I 303",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 52,
+    "name": "I 309",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 53,
+    "name": "I 310, I 311",
+    "parent_building_en": "Main building - Engineering block"
+  },
+  {
+    "id": 54,
+    "name": "I 312",
+    "parent_building_en": "Main building - Engineering block"
+  }
+]

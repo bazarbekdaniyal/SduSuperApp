@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} - {{ t('shop.title') }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="product-detail-nav">
+        <a href="{{ url_for('shop.list_products') }}" class="btn btn-outline">
+            <i class="fas fa-arrow-left"></i> {{ t('shop.back_to_catalog') }}
+        </a>
+    </div>
+
+    <div class="product-detail-card">
+        <div class="product-detail-grid">
+            <div class="product-detail-image">
+                {% if product.image %}
+                <img src="{{ product.image }}" alt="{{ product.name }}">
+                {% else %}
+                <div class="placeholder-image">
+                    <i class="fas fa-image"></i>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="product-detail-info">
+                <span class="product-category tag">{{ product.category }}</span>
+                <h1 class="product-title">{{ product.name }}</h1>
+
+                <div class="product-price-block">
+                    <span class="price">{{ "%.0f"|format(product.price) }} ₸</span>
+                    <span class="stock-status {% if product.stock > 0 %}in-stock{% else %}out-of-stock{% endif %}">
+                        {% if product.stock > 0 %}
+                        <i class="fas fa-check-circle"></i> {{ t('shop.in_stock') }}
+                        {% else %}
+                        <i class="fas fa-times-circle"></i> {{ t('shop.out_of_stock') }}
+                        {% endif %}
+                    </span>
+                </div>
+
+                <div class="product-description-block">
+                    <h3>{{ t('shop.detail.description') }}</h3>
+                    <p>{{ product.description }}</p>
+                </div>
+
+                <div class="product-actions">
+                    {% if product.stock > 0 %}
+                    {% if product.id in cart_product_ids %}
+                    <a href="{{ url_for('shop.cart') }}" class="btn btn-success btn-lg">
+                        <i class="fas fa-shopping-cart"></i> {{ t('shop.go_to_cart') }}
+                    </a>
+                    {% else %}
+                    <form action="{{ url_for('shop.add_to_cart', product_id=product.id) }}" method="POST"
+                        class="add-to-cart-form-large">
+                        <div class="quantity-selector">
+                            <button type="button" class="qty-btn minus" onclick="decrementQty()"><i
+                                    class="fas fa-minus"></i></button>
+                            <input type="number" name="quantity" id="quantity" value="1" min="1"
+                                max="{{ product.stock }}">
+                            <button type="button" class="qty-btn plus" onclick="incrementQty()"><i
+                                    class="fas fa-plus"></i></button>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-cart-plus"></i> {{ t('common.add_to_cart') }}
+                        </button>
+                    </form>
+                    {% endif %}
+                    {% else %}
+                    <button class="btn btn-secondary btn-lg" disabled>
+                        {{ t('shop.out_of_stock') }}
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function incrementQty() {
+        var input = document.getElementById('quantity');
+        var max = parseInt(input.getAttribute('max'));
+        var value = parseInt(input.value);
+        if (value < max) {
+            input.value = value + 1;
+        }
+    }
+
+    function decrementQty() {
+        var input = document.getElementById('quantity');
+        var value = parseInt(input.value);
+        if (value > 1) {
+            input.value = value - 1;
+        }
+    }
+</script>
+
+<style>
+    .product-detail-nav {
+        margin-bottom: 2rem;
+    }
+
+    .product-detail-card {
+        background: var(--bg-secondary);
+        border-radius: var(--radius-lg);
+        padding: 2rem;
+        box-shadow: var(--shadow-md);
+    }
+
+    .product-detail-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+    }
+
+    .product-detail-image img {
+        width: 100%;
+        height: auto;
+        border-radius: var(--radius-md);
+        object-fit: cover;
+    }
+
+    .product-detail-image .placeholder-image {
+        width: 100%;
+        height: 400px;
+        background: var(--bg-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 5rem;
+        color: var(--text-muted);
+        border-radius: var(--radius-md);
+    }
+
+    .tag {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        background: var(--primary-light);
+        color: var(--primary);
+        border-radius: var(--radius-sm);
+        font-size: 0.875rem;
+        font-weight: 500;
+        margin-bottom: 1rem;
+    }
+
+    .product-title {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        line-height: 1.2;
+    }
+
+    .product-price-block {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        margin-bottom: 2rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .price {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary);
+    }
+
+    .stock-status {
+        font-weight: 500;
+    }
+
+    .stock-status.in-stock {
+        color: var(--success);
+    }
+
+    .stock-status.out-of-stock {
+        color: var(--danger);
+    }
+
+    .product-description-block h3 {
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+    }
+
+    .product-description-block p {
+        color: var(--text-secondary);
+        line-height: 1.6;
+        margin-bottom: 2rem;
+    }
+
+    .add-to-cart-form-large {
+        display: flex;
+        gap: 1rem;
+        align-items: stretch;
+    }
+
+    .quantity-selector {
+        display: flex;
+        align-items: center;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        background: var(--bg-primary);
+    }
+
+    .qty-btn {
+        border: none;
+        background: none;
+        padding: 0 1rem;
+        cursor: pointer;
+        color: var(--text-primary);
+    }
+
+    .quantity-selector input {
+        width: 50px;
+        text-align: center;
+        border: none;
+        background: none;
+        font-weight: 600;
+        appearance: textfield;
+        -moz-appearance: textfield;
+        margin: 0;
+        padding: 0.5rem 0;
+        line-height: 1.5;
+        color: var(--text-primary);
+    }
+
+    .quantity-selector input::-webkit-outer-spin-button,
+    .quantity-selector input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    @media (max-width: 768px) {
+        .product-detail-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .add-to-cart-form-large {
+            flex-direction: column;
+        }
+
+        .quantity-selector {
+            justify-content: center;
+            padding: 0.5rem;
+        }
+    }
+</style>
+{% endblock %}
