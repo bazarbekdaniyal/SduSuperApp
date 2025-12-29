@@ -287,9 +287,9 @@ The application will be available at: `http://localhost:5000`
 
 ## 👥 Team
 
-- Daniyal Bazarbek
-- Yerkezhan Chakenova
-- Kenshibek Assylkhan
+- Daniyal Bazarbek **Developer** 
+- Yerkezhan Chakenova **Presentation (PPT)** 
+- Kenshibek Assylkhan **Tester** 
 
 ---
 
