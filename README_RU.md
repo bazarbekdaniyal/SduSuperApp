@@ -287,9 +287,9 @@ python app.py
 
 ## 👥 Команда
 
-- Daniyal Bazarbek
-- Yerkezhan Chakenova
-- Kenshibek Assylkhan
+- Daniyal Bazarbek **Developer** 
+- Yerkezhan Chakenova **Presentation (PPT)** 
+- Kenshibek Assylkhan **Tester** 
 
 ---
 
