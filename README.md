@@ -1,4 +1,5 @@
 # SDU SuperApp
+https://sduapp.pythonanywhere.com/
 
 **Web Platform for SDU Students and Teachers**
 
