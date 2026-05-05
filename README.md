@@ -245,7 +245,7 @@ docker compose up -d --build
 
 The application will be available at: `http://localhost:5001`.
 
-JSON data files are mounted from `./data` into the container, so orders, reviews, ratings, and other data stay persistent between container rebuilds.
+JSON data files are persisted in the Docker volume `app_data`, so orders, reviews, ratings, and other data stay persistent between container rebuilds.
 
 ---
 
