@@ -17,7 +17,10 @@ SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD', '')
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY', 'change-this-in-production')
     DEBUG = False
-    DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data')
+    DATA_DIR = os.environ.get(
+        'DATA_DIR',
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data')
+    )
     
     # Admin Panel (set in environment variables for production)
     ADMIN_USERNAME = os.environ.get('ADMIN_USERNAME', 'admin')
@@ -35,4 +38,3 @@ config = {
     'production': ProductionConfig,
     'default': DevelopmentConfig
 }
-

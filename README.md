@@ -233,7 +233,19 @@ pip install deep-translator
 python app.py
 ```
 
-The application will be available at: `http://localhost:5000`
+The application will be available at: `http://localhost:5001`
+
+### Docker Deployment
+
+```bash
+cp .env.example .env
+# Edit .env and set SECRET_KEY, ADMIN_USERNAME, ADMIN_PASSWORD
+docker compose up -d --build
+```
+
+The application will be available at: `http://localhost:5001`.
+
+JSON data files are mounted from `./data` into the container, so orders, reviews, ratings, and other data stay persistent between container rebuilds.
 
 ---
 

@@ -232,7 +232,19 @@ pip install deep-translator
 python app.py
 ```
 
-Приложение будет доступно по адресу: `http://localhost:5000`
+Приложение будет доступно по адресу: `http://localhost:5001`
+
+### Деплой через Docker
+
+```bash
+cp .env.example .env
+# Отредактируйте .env и задайте SECRET_KEY, ADMIN_USERNAME, ADMIN_PASSWORD
+docker compose up -d --build
+```
+
+Приложение будет доступно по адресу: `http://localhost:5001`.
+
+JSON-файлы из `./data` монтируются в контейнер, поэтому заказы, отзывы, рейтинги и другие данные сохраняются между пересборками контейнера.
 
 ---
 
@@ -298,4 +310,3 @@ python app.py
 Проект создан в рамках курса CSS 217 – Software Architecture and Design Patterns.
 
 © 2025 SDU University
-
